@@ -20,5 +20,4 @@ public class UserRepository extends BaseRepository {
         user.setPassword(bCryptPasswordEncoder.encode(("dddoge123")));
         return user;
     }
-
 }
