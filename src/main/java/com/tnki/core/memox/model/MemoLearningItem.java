@@ -9,7 +9,7 @@ import java.util.Date;
 @Setter
 public class MemoLearningItem extends MemoItem {
     private int learnTime;
-    private float EF;
+    private double EF;
     private Date nextLearnDate;
 
     MemoLearningItem(MemoItem item) {
