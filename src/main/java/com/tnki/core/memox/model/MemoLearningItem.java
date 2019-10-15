@@ -12,6 +12,8 @@ public class MemoLearningItem extends MemoItem {
     private double EF;
     private Date nextLearnDate;
 
+    MemoLearningItem() {}
+
     MemoLearningItem(MemoItem item) {
         super.setID(item.getID());
         super.setFrontText(item.getFrontText());

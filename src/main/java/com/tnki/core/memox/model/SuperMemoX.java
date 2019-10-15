@@ -18,8 +18,13 @@ public class SuperMemoX implements Memo {
     @Override
     public MemoLearningItem learnItem(MemoItem item, int memoQuality) {
         MemoLearningItem learningItem = new MemoLearningItem(item);
-        Date nextLearningDate = periodicCalculator.calcNextLearnDate(learningItem, memoQuality);
-        return null;
+        Date nextLearningDate = periodicCalculator.calcNextLearnDate(learningItem);
+        double nextEF = periodicCalculator.calcNextEF(learningItem.getEF(), memoQuality);
+
+        learningItem.setEF(nextEF);
+        learningItem.setLearnTime(learningItem.getLearnTime() + 1);
+        learningItem.setNextLearnDate((nextLearningDate));
+        return learningItem;
     }
 
     @Override
