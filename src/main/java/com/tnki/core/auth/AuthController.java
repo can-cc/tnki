@@ -15,13 +15,9 @@ public class AuthController {
     @Autowired
     private AuthApplicationService authApplicationService;
 
-
-
     @RequestMapping(value = "/signin", method = RequestMethod.POST)
     public String signin(@RequestBody @Valid LoginCommand command) {
         authApplicationService.login(command);
-        return "login";
+        return "OK";
     }
-
-
 }

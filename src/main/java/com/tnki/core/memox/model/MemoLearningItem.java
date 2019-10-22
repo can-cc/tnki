@@ -16,9 +16,9 @@ public class MemoLearningItem extends MemoItem {
 
     MemoLearningItem(MemoItem item) {
         super.setID(item.getID());
-        super.setFrontText(item.getFrontText());
-        super.setBackText(item.getBackText());
-        super.setTipText((item.getTipText()));
+        super.setFront(item.getFront());
+        super.setTip(item.getTip());
+        super.setBack((item.getBack()));
         super.setCreatedAt(item.getCreatedAt());
         super.setUpdatedAt(item.getUpdatedAt());
     }
