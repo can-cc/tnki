@@ -9,5 +9,4 @@ public class CoreController {
     public String hello() {
         return "Hello world";
     }
-
 }

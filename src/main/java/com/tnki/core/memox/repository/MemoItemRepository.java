@@ -12,5 +12,9 @@ public class MemoItemRepository extends BaseRepository {
         return items;
     }
 
+    public void saveItems(MemoItem item) {
+
+    }
+
 
 }
