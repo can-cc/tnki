@@ -3,7 +3,11 @@ package com.tnki.core.memox.repository;
 import com.tnki.core.memox.model.MemoItem;
 import com.tnki.core.share.model.BaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -13,7 +17,7 @@ import java.util.List;
 public class MemoItemRepository extends BaseRepository {
 
     @Autowired
-    JdbcTemplate jdbcTemplate;
+    NamedParameterJdbcTemplate jdbcTemplate;
 
     public List<MemoItem> getNotStartedItems(String userID, int litmit) {
         List<MemoItem> items = new ArrayList<>();
@@ -21,7 +25,9 @@ public class MemoItemRepository extends BaseRepository {
     }
 
     public void saveItem(MemoItem item) {
-        int ID = jdbcTemplate.update("INSERT INTO learn_item(front, tip, back) VALUES (?, ?, ?)", item.getFront(), item.getTip(), item.getBack());
-        item.setID(ID);
+        SqlParameterSource parameters = new BeanPropertySqlParameterSource(item);
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update("INSERT INTO learn_item(front, tip, back) VALUES (:front, :tip, :back)", parameters, keyHolder);
+        item.setID(keyHolder.getKey().intValue());
     }
 }
