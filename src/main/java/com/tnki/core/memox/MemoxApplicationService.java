@@ -20,7 +20,7 @@ public class MemoxApplicationService {
 
     public int createLearnItem(CreateLearnItemCommand command) {
         MemoItem item = memoItemFactory.create(command);
-        memoItemRepository.saveItem(item);
+        memoItemRepository.inertItem(item);
         log.info("Created learn item [{}].", item.getID());
         return item.getID();
     }
