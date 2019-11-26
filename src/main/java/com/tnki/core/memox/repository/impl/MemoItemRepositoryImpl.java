@@ -17,8 +17,12 @@ import java.util.List;
 @Component
 public class MemoItemRepositoryImpl extends BaseRepository implements MemoItemRepository {
 
-    @Autowired
+    final
     NamedParameterJdbcTemplate jdbcTemplate;
+
+    public MemoItemRepositoryImpl(NamedParameterJdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Override
     public List<MemoItem> listUnStartedItems(String userID, int litmit) {

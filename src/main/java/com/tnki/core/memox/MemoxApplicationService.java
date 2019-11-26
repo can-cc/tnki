@@ -12,11 +12,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class MemoxApplicationService {
 
-    @Autowired
-    MemoItemFactory memoItemFactory;
+    final
+    private MemoItemFactory memoItemFactory;
+
+    final
+    MemoItemRepository memoItemRepository;
 
     @Autowired
-    MemoItemRepository memoItemRepository;
+    public MemoxApplicationService(MemoItemFactory memoItemFactory, MemoItemRepository memoItemRepository) {
+        this.memoItemFactory = memoItemFactory;
+        this.memoItemRepository = memoItemRepository;
+    }
 
     public int createLearnItem(CreateLearnItemCommand command) {
         MemoItem item = memoItemFactory.create(command);
