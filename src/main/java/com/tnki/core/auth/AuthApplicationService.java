@@ -1,6 +1,7 @@
 package com.tnki.core.auth;
 
 import com.tnki.core.auth.command.LoginCommand;
+import com.tnki.core.auth.command.SignUpCommand;
 import com.tnki.core.auth.service.SecurityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,5 +15,9 @@ public class AuthApplicationService {
 
     public void login(LoginCommand command) {
         securityService.autoLogin(command.username, command.password);
+    }
+
+    public void signUp(SignUpCommand command) {
+        securityService.registerNewUser(command);
     }
 }

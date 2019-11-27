@@ -26,4 +26,18 @@ public class MemoxController {
 
         return res;
     }
+
+    // Daily check-in
+    @RequestMapping(value = "/daily-check-in", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public HashMap<String, Object> dailyCheckIn(@RequestBody @Valid CreateLearnItemCommand command) {
+        int id = memoxApplicationService.createLearnItem(command);
+
+        HashMap<String, Object> res = new LinkedHashMap<>();
+        res.put("id", id);
+
+        return res;
+    }
+
 }

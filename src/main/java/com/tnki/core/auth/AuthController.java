@@ -1,6 +1,7 @@
 package com.tnki.core.auth;
 
 import com.tnki.core.auth.command.LoginCommand;
+import com.tnki.core.auth.command.SignUpCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,12 +13,22 @@ import javax.validation.Valid;
 @RestController
 public class AuthController {
 
+    private final AuthApplicationService authApplicationService;
+
     @Autowired
-    private AuthApplicationService authApplicationService;
+    public AuthController(AuthApplicationService authApplicationService) {
+        this.authApplicationService = authApplicationService;
+    }
 
     @RequestMapping(value = "/signin", method = RequestMethod.POST)
     public String signin(@RequestBody @Valid LoginCommand command) {
         authApplicationService.login(command);
+        return "OK";
+    }
+
+    @RequestMapping(value = "/signup", method = RequestMethod.POST)
+    public String signup(@RequestBody @Valid SignUpCommand command) {
+        authApplicationService.signUp(command);
         return "OK";
     }
 }
