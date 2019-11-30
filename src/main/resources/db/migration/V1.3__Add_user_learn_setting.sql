@@ -1,0 +1,7 @@
+CREATE TABLE user_learn_setting (
+     user_id INT PRIMARY KEY NOT NULL,
+     daily_learn_number INT NOT NULL DEFAULT 10,
+     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+     FOREIGN KEY (user_id) REFERENCES user(id)
+);
