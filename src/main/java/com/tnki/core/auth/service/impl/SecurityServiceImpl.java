@@ -5,6 +5,7 @@ import com.tnki.core.auth.exception.UserAlreadyExistException;
 import com.tnki.core.auth.model.User;
 import com.tnki.core.auth.repository.UserRepository;
 import com.tnki.core.auth.service.SecurityService;
+import com.tnki.core.memox.MemoxApplicationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class SecurityServiceImpl implements SecurityService {
@@ -23,26 +25,29 @@ public class SecurityServiceImpl implements SecurityService {
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
     private final UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
-
+    private final PasswordEncoder passwordEncoder;
+    private final MemoxApplicationService memoxApplicationService;
 
     @Autowired
     public SecurityServiceImpl(
             @Qualifier("TnkiUserDetailsService") UserDetailsService userDetailsService,
             AuthenticationManager authenticationManager,
             UserRepository userRepository,
-            @Qualifier("PasswordEncoder") PasswordEncoder passwordEncoder
+            @Qualifier("PasswordEncoder") PasswordEncoder passwordEncoder,
+            MemoxApplicationService memoxApplicationService
     ) {
         this.userDetailsService = userDetailsService;
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.memoxApplicationService = memoxApplicationService;
     }
 
     private boolean userExists(String username) {
         return userRepository.findByUsername(username) != null;
     }
 
+    @Transactional
     @Override
     public User registerNewUser(SignUpCommand command) {
         if (userExists(command.username)) {
@@ -53,6 +58,9 @@ public class SecurityServiceImpl implements SecurityService {
         user.setUsername(command.username);
         user.setPasswordHash(passwordEncoder.encode(command.password));
         userRepository.insertUser(user);
+
+        memoxApplicationService.initUserLearnSetting(user.getID());
+
         return user;
     }
 

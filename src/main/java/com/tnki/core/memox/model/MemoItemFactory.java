@@ -3,8 +3,6 @@ package com.tnki.core.memox.model;
 import com.tnki.core.memox.command.CreateLearnItemCommand;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
 public class MemoItemFactory {
 

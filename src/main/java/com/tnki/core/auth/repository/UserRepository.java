@@ -6,4 +6,6 @@ public interface UserRepository {
     User findByUsername(String username);
 
     void insertUser(User user);
+
+    int queryUserIdByUsername(String username);
 }

@@ -5,7 +5,9 @@ import com.tnki.core.memox.model.MemoItem;
 import java.util.List;
 
 public interface MemoItemRepository {
-    List<MemoItem> listUnStartedItems(String userID, int litmit);
+    List<MemoItem> listUserUnStartedItems(String username, int litmit);
 
-    void inertItem(MemoItem item);
+    int countUserLearningItem(String username);
+
+    void insertItem(MemoItem item);
 }

@@ -7,19 +7,14 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class MemoLearningItem extends MemoItem {
+public class MemoLearningItem {
     private int learnTime;
     private double EF;
     private Date nextLearnDate;
+    private MemoItem memoItem;
 
-    MemoLearningItem() {}
 
-    MemoLearningItem(MemoItem item) {
-        super.setID(item.getID());
-        super.setFront(item.getFront());
-        super.setTip(item.getTip());
-        super.setBack((item.getBack()));
-        super.setCreatedAt(item.getCreatedAt());
-        super.setUpdatedAt(item.getUpdatedAt());
+    MemoLearningItem(MemoItem item, int username) {
+        this.setMemoItem(item);
     }
 }

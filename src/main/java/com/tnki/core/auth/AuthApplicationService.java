@@ -20,4 +20,8 @@ public class AuthApplicationService {
     public void signUp(SignUpCommand command) {
         securityService.registerNewUser(command);
     }
+
+    public void getUserIdByUsername() {
+        
+    }
 }

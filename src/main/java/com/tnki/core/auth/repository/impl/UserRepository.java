@@ -49,4 +49,13 @@ public class UserRepository extends BaseRepository implements com.tnki.core.auth
         jdbcTemplate.update("INSERT INTO user(username, password_hash) VALUES (:username, :passwordHash)", parameters, keyHolder);
         user.setID(keyHolder.getKey().intValue());
     }
+
+    @Override
+    public int queryUserIdByUsername(String username) {
+        return jdbcTemplate.queryForObject(
+                "SELECT id FROM user WHERE username = :username",
+                new MapSqlParameterSource("username", username),
+                Integer.class
+        );
+    }
 }
