@@ -21,10 +21,10 @@ public class MemoUserSettingRepositoryImpl implements MemoUserSettingRepository 
     }
 
     @Override
-    public UserLearnSetting findUserLearnSetting(String username) {
+    public UserLearnSetting findUserLearnSetting(int userID) {
         return jdbcTemplate.queryForObject(
-                "SELECT userId, daily_learn_number FROM user_learn_setting WHERE username = :username",
-                new MapSqlParameterSource("username", username),
+                "SELECT user_id, daily_learn_number FROM user_learn_setting WHERE user_id = :userID",
+                new MapSqlParameterSource("userID", userID),
                 new UserLearnSettingMapper()
         );
     }

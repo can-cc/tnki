@@ -5,6 +5,7 @@ import com.tnki.core.memox.model.MemoLearningItem;
 import com.tnki.core.memox.repository.MemoItemRepository;
 import com.tnki.core.share.model.BaseRepository;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -31,20 +32,23 @@ public class MemoItemRepositoryImpl extends BaseRepository implements MemoItemRe
     }
 
     @Override
-    public List<MemoItem> listUserUnStartedItems(String username, int litmit) {
+    public List<MemoItem> listUserUnStartedItems(int userID, int limit) {
+        MapSqlParameterSource parameter = new MapSqlParameterSource();
+        parameter.addValue("userID", userID);
+        parameter.addValue("limit", limit);
         return jdbcTemplate.query(
-                "SELECT a.id, a.front, a.back, a.tip from learn_item as a LEFT JOIN user_learning_item as b ON a.id = b.user_id WHERE b.user_id = NULL AND a.username =: username LIMIT :limit",
-                new MapSqlParameterSource("username", username),
+                "SELECT a.id, a.front, a.back, a.tip from learn_item as a LEFT JOIN user_learn_item as b ON a.id = b.user_id WHERE b.user_id IS NULL AND b.user_id = :userID LIMIT :limit",
+                parameter,
                 new MemoItemMapper()
         );
     }
 
     @SuppressWarnings("ConstantConditions")
     @Override
-    public int countUserLearningItem(String username) {
-        Map<String, String> paramMap = new HashMap<>();
-        paramMap.put("username", username);
-        return jdbcTemplate.<Integer>queryForObject("SELECT count(item_id) as count from user_learn_item WHERE username = :username", paramMap, Integer.class);
+    public int countUserLearningItem(int userID) {
+        Map<String, Integer> paramMap = new HashMap<>();
+        paramMap.put("userID", userID);
+        return jdbcTemplate.<Integer>queryForObject("SELECT count(item_id) as count from user_learn_item WHERE user_id = :userID", paramMap, Integer.class);
     }
 
     @Override

@@ -17,6 +17,14 @@ public abstract class AppException extends RuntimeException {
         }
     }
 
+    protected AppException(Throwable cause, ErrorCode error, Map<String, Object> data) {
+        super(format(error.getCode(), error.getMessage(), data), cause);
+        this.error = error;
+        if (!isEmpty(data)) {
+            this.data.putAll(data);
+        }
+    }
+
     protected AppException(ErrorCode code, Map<String, Object> data, Throwable cause) {
         super(format(code.toString(), code.getMessage(), data), cause);
         this.error = code;

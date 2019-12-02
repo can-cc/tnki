@@ -32,31 +32,27 @@ public class MemoxApplicationService {
         this.periodicCalculator = periodicCalculator;
     }
 
-    public int createLearnItem(CreateLearnItemCommand command) {
+    int createLearnItem(CreateLearnItemCommand command) {
         MemoItem item = memoItemFactory.create(command);
         memoItemRepository.insertItem(item);
         log.info("Created learn item [{}].", item.getID());
         return item.getID();
     }
 
-    public void userDailyCheckIn(String username) {
-        int learningCount = memoItemRepository.countUserLearningItem(username);
-        UserLearnSetting userLearnSetting = memoUserSettingRepository.findUserLearnSetting(username);
+    void userDailyCheckIn(String username) {
+        int userID = authApplicationService.getUserIdByUsername(username);
+
+        int learningCount = memoItemRepository.countUserLearningItem(userID);
+        UserLearnSetting userLearnSetting = memoUserSettingRepository.findUserLearnSetting(userID);
         int learnNewNumber = userLearnSetting.getDailyLearnNumber() - learningCount;
 
-        if (learningCount <= 0) {
+        if (learnNewNumber <= 0) {
             return;
         }
 
         Memo memo = new SuperMemoX(periodicCalculator, memoRepository, memoItemRepository);
-        int userID = authApplicationService.getUserIdByUsername(username);
 
-        List<MemoItem> memoItems = memoItemRepository.listUserUnStartedItems(username, learnNewNumber);
+        List<MemoItem> memoItems = memoItemRepository.listUserUnStartedItems(userID, learnNewNumber);
         memoItems.parallelStream().forEach(memoItem -> memo.startLearnItem(memoItem, userID));
     }
-
-    public void initUserLearnSetting(int userId) {
-        memoRepository.insertUserLearnSetting(userId);
-    }
-
 }

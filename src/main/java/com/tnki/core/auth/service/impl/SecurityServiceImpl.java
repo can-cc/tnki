@@ -5,7 +5,7 @@ import com.tnki.core.auth.exception.UserAlreadyExistException;
 import com.tnki.core.auth.model.User;
 import com.tnki.core.auth.repository.UserRepository;
 import com.tnki.core.auth.service.SecurityService;
-import com.tnki.core.memox.MemoxApplicationService;
+import com.tnki.core.memox.repository.MemoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class SecurityServiceImpl implements SecurityService {
     private final UserDetailsService userDetailsService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final MemoxApplicationService memoxApplicationService;
+    private final MemoRepository memoRepository;
 
     @Autowired
     public SecurityServiceImpl(
@@ -34,13 +34,12 @@ public class SecurityServiceImpl implements SecurityService {
             AuthenticationManager authenticationManager,
             UserRepository userRepository,
             @Qualifier("PasswordEncoder") PasswordEncoder passwordEncoder,
-            MemoxApplicationService memoxApplicationService
-    ) {
+            MemoRepository memoRepository) {
         this.userDetailsService = userDetailsService;
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.memoxApplicationService = memoxApplicationService;
+        this.memoRepository = memoRepository;
     }
 
     private boolean userExists(String username) {
@@ -59,8 +58,7 @@ public class SecurityServiceImpl implements SecurityService {
         user.setPasswordHash(passwordEncoder.encode(command.password));
         userRepository.insertUser(user);
 
-        memoxApplicationService.initUserLearnSetting(user.getID());
-
+        memoRepository.insertUserLearnSetting(user.getID());
     }
 
     @Override
