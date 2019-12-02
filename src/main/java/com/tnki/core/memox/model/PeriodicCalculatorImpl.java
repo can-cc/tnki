@@ -21,6 +21,11 @@ public class PeriodicCalculatorImpl implements PeriodicCalculator {
     }
 
     @Override
+    public Date getStartLearnDate() {
+        return MemoDateUtil.today();
+    }
+
+    @Override
     public double calcNextEF(double lastEF, int memoQuality) {
         return lastEF + (0.1 - (5 - memoQuality)) * ((0.08 + (5 - memoQuality) * 0.02));
     }

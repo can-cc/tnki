@@ -32,7 +32,7 @@ public class UserRepository extends BaseRepository implements com.tnki.core.auth
     public User findByUsername(String username) {
         SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("username", username);
         try {
-            return (User) jdbcTemplate.queryForObject(
+            return jdbcTemplate.queryForObject(
                     "SELECT id, username, password_hash FROM user WHERE username = :username",
                     namedParameters,
                     new BeanPropertyRowMapper<User>(User.class)

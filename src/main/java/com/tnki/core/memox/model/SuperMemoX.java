@@ -1,14 +1,25 @@
 package com.tnki.core.memox.model;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.tnki.core.memox.repository.MemoItemRepository;
+import com.tnki.core.memox.repository.MemoRepository;
+import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+
+@Component
 public class SuperMemoX implements Memo {
-    @Autowired
-    PeriodicCalculator periodicCalculator;
+    final private PeriodicCalculator periodicCalculator;
+    final private MemoRepository memoRepository;
+    final private MemoItemRepository memoItemRepository;
+
+
+    public SuperMemoX(PeriodicCalculator periodicCalculator, MemoRepository memoRepository, MemoItemRepository memoItemRepository) {
+        this.periodicCalculator = periodicCalculator;
+        this.memoRepository = memoRepository;
+        this.memoItemRepository = memoItemRepository;
+    }
 
     @Override
     public List<MemoItem> getLearningItem(String userID, int limit, Date date) {
@@ -16,8 +27,8 @@ public class SuperMemoX implements Memo {
     }
 
     @Override
-    public MemoLearningItem learnItem(MemoItem item, int memoQuality) {
-        MemoLearningItem learningItem = new MemoLearningItem(item);
+    public MemoLearningItem learnItem(MemoItem item, int userID, int memoQuality) {
+        MemoLearningItem learningItem = new MemoLearningItem(item, userID);
         Date nextLearningDate = periodicCalculator.calcNextLearnDate(learningItem);
         double nextEF = periodicCalculator.calcNextEF(learningItem.getEF(), memoQuality);
 
@@ -28,8 +39,13 @@ public class SuperMemoX implements Memo {
     }
 
     @Override
-    public MemoLearningItem updateLearnItem(MemoLearningItem item) {
-        return null;
+    public void startLearnItem(MemoItem memoItem, int userID) {
+        double LEARN_ITEM_INITIAL_EF = 1.3;
+        MemoLearningItem memoLearningItem = new MemoLearningItem(memoItem, userID);
+        memoLearningItem.setLearnTime(0);
+        memoLearningItem.setEF(LEARN_ITEM_INITIAL_EF);
+        memoLearningItem.setNextLearnDate(periodicCalculator.getStartLearnDate());
+        memoItemRepository.insertLearningItem(memoLearningItem);
     }
 
     @Override

@@ -9,8 +9,7 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 
 @Configuration
-public class RESTConfiguration
-{
+public class RESTConfiguration {
     @Bean
     public View jsonTemplate() {
         MappingJackson2JsonView view = new MappingJackson2JsonView();

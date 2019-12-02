@@ -1,6 +1,7 @@
 package com.tnki.core.memox.repository.impl;
 
 import com.tnki.core.memox.model.MemoItem;
+import com.tnki.core.memox.model.MemoLearningItem;
 import com.tnki.core.memox.repository.MemoItemRepository;
 import com.tnki.core.share.model.BaseRepository;
 import org.springframework.jdbc.core.RowMapper;
@@ -14,10 +15,10 @@ import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Component
 public class MemoItemRepositoryImpl extends BaseRepository implements MemoItemRepository {
@@ -38,19 +39,30 @@ public class MemoItemRepositoryImpl extends BaseRepository implements MemoItemRe
         );
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public int countUserLearningItem(String username) {
         Map<String, String> paramMap = new HashMap<>();
         paramMap.put("username", username);
-        return jdbcTemplate.queryForObject("SELECT count(item_id) as count from user_learn_item WHERE username = :username", paramMap, Integer.class);
+        return jdbcTemplate.<Integer>queryForObject("SELECT count(item_id) as count from user_learn_item WHERE username = :username", paramMap, Integer.class);
     }
 
     @Override
-    public void insertItem(MemoItem item) {
-        SqlParameterSource parameters = new BeanPropertySqlParameterSource(item);
+    public void insertItem(MemoItem memoItem) {
+        SqlParameterSource parameters = new BeanPropertySqlParameterSource(memoItem);
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update("INSERT INTO learn_item(front, tip, back) VALUES (:front, :tip, :back)", parameters, keyHolder);
-        item.setID(keyHolder.getKey().intValue());
+        memoItem.setID(Objects.requireNonNull(keyHolder.getKey()).intValue());
+    }
+
+    @Override
+    public void insertLearningItem(MemoLearningItem memoLearningItem) {
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("userID", memoLearningItem.getUserID());
+        paramMap.put("memoItemID", memoLearningItem.getMemoItem().getID());
+        paramMap.put("ef", memoLearningItem.getEF());
+        paramMap.put("n", memoLearningItem.getLearnTime());
+        jdbcTemplate.update("INSERT INTO user_learn_item(user_id, item_id, ef, n, is_learning) VALUES (:userID, :memoItemID, :ef, :learnTime, true)", paramMap);
     }
 
     private static final class MemoItemMapper implements RowMapper<MemoItem> {

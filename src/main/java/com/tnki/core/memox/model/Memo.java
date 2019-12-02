@@ -6,9 +6,9 @@ import java.util.List;
 public interface Memo {
     List<MemoItem> getLearningItem(String userID, int limit, Date date);
 
-    MemoLearningItem learnItem(MemoItem item, int memoQuality);
+    MemoLearningItem learnItem(MemoItem item, int userID, int memoQuality);
 
-    MemoLearningItem updateLearnItem(MemoLearningItem item);
+    void startLearnItem(MemoItem item, int userID);
 
     void finishLearnItem(MemoLearningItem item);
 }

@@ -49,7 +49,7 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Transactional
     @Override
-    public User registerNewUser(SignUpCommand command) {
+    public void registerNewUser(SignUpCommand command) {
         if (userExists(command.username)) {
             throw new UserAlreadyExistException(command.username);
         }
@@ -61,16 +61,6 @@ public class SecurityServiceImpl implements SecurityService {
 
         memoxApplicationService.initUserLearnSetting(user.getID());
 
-        return user;
-    }
-
-    @Override
-    public String findLoggedInUsername() {
-        Object userDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
-        if (userDetails instanceof UserDetails) {
-            return ((UserDetails) userDetails).getUsername();
-        }
-        return null;
     }
 
     @Override

@@ -24,8 +24,8 @@ public class MemoUserSettingRepositoryImpl implements MemoUserSettingRepository 
     public UserLearnSetting findUserLearnSetting(String username) {
         return jdbcTemplate.queryForObject(
                 "SELECT userId, daily_learn_number FROM user_learn_setting WHERE username = :username",
-                    new MapSqlParameterSource("username", username),
-                    new UserLearnSettingMapper()
+                new MapSqlParameterSource("username", username),
+                new UserLearnSettingMapper()
         );
     }
 

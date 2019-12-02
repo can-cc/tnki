@@ -10,9 +10,10 @@ class PeriodicCalculatorImplTest {
 
     @org.junit.jupiter.api.Test
     void calcNextLearnDate() {
-        MemoLearningItem item = new MemoLearningItem();
-        item.setLearnTime(0);
-        Date nextLearnDate = periodicCalculator.calcNextLearnDate(item);
+        MemoItem memoItem = new MemoItem();
+        MemoLearningItem memoLearningItem = new MemoLearningItem(memoItem, 101);
+        memoLearningItem.setLearnTime(0);
+        Date nextLearnDate = periodicCalculator.calcNextLearnDate(memoLearningItem);
 
         assertEquals(nextLearnDate.toString(), MemoDateUtil.nextDays(1).toString());
     }
