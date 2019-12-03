@@ -30,6 +30,15 @@ public class MemoItemRepositoryImpl extends BaseRepository implements MemoItemRe
     }
 
     @Override
+    public MemoItem findMemoItem(int memoItemID) {
+        return jdbcTemplate.queryForObject(
+                "SELECT id, front, back, tip from learn_item WHERE id = :id",
+                new MapSqlParameterSource("id", memoItemID),
+                new MemoItemMapper()
+        );
+    }
+
+    @Override
     public List<MemoItem> listUserUnStartedItems(int userID, int limit) {
         MapSqlParameterSource parameter = new MapSqlParameterSource();
         parameter.addValue("userID", userID);

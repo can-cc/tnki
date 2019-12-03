@@ -2,6 +2,7 @@ package com.tnki.core.memox;
 
 import com.tnki.core.auth.AuthApplicationService;
 import com.tnki.core.memox.command.CreateLearnItemCommand;
+import com.tnki.core.memox.command.LearnItemCommand;
 import com.tnki.core.memox.model.*;
 import com.tnki.core.memox.repository.MemoItemRepository;
 import com.tnki.core.memox.repository.MemoRepository;
@@ -19,21 +20,28 @@ public class MemoxApplicationService {
     final private MemoItemRepository memoItemRepository;
     final private MemoRepository memoRepository;
     final private MemoUserSettingRepository memoUserSettingRepository;
-    final private AuthApplicationService authApplicationService;
     final private PeriodicCalculator periodicCalculator;
+    final private Memo memo;
 
     @Autowired
-    public MemoxApplicationService(MemoItemFactory memoItemFactory, MemoItemRepository memoItemRepository, MemoRepository memoRepository, MemoUserSettingRepository memoUserSettingRepository, AuthApplicationService authApplicationService, PeriodicCalculator periodicCalculator) {
+    public MemoxApplicationService(
+            MemoItemFactory memoItemFactory,
+            MemoItemRepository memoItemRepository,
+            MemoRepository memoRepository,
+            MemoUserSettingRepository memoUserSettingRepository,
+            PeriodicCalculator periodicCalculator,
+            Memo memo
+    ) {
         this.memoItemFactory = memoItemFactory;
         this.memoItemRepository = memoItemRepository;
         this.memoRepository = memoRepository;
         this.memoUserSettingRepository = memoUserSettingRepository;
-        this.authApplicationService = authApplicationService;
         this.periodicCalculator = periodicCalculator;
+        this.memo = memo;
     }
 
     int createLearnItem(CreateLearnItemCommand command, int userID) {
-        MemoItem item = memoItemFactory.create(command);
+      MemoItem item = memoItemFactory.create(command);
         memoItemRepository.insertItem(item, userID);
         log.info("Created learn item [{}].", item.getID());
         return item.getID();
@@ -48,9 +56,12 @@ public class MemoxApplicationService {
             return;
         }
 
-        Memo memo = new SuperMemoX(periodicCalculator, memoRepository, memoItemRepository);
-
         List<MemoItem> memoItems = memoItemRepository.listUserUnStartedItems(userID, learnNewNumber);
         memoItems.parallelStream().forEach(memoItem -> memo.startLearnItem(memoItem, userID));
+    }
+
+    void learnItem(LearnItemCommand learnItemCommand, int userID) {
+        MemoItem memoItem = memoItemRepository.findMemoItem(learnItemCommand.getItemID());
+        memo.learnItem(memoItem, userID, learnItemCommand.getMemoQuality());
     }
 }

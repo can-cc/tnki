@@ -2,6 +2,7 @@ package com.tnki.core.memox;
 
 import com.tnki.core.auth.AuthApplicationService;
 import com.tnki.core.memox.command.CreateLearnItemCommand;
+import com.tnki.core.memox.command.LearnItemCommand;
 import com.tnki.core.memox.exception.DailyCheckInException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,5 +53,15 @@ public class MemoxController {
         } catch (Exception e) {
             throw new DailyCheckInException(e, username);
         }
+    }
+
+    @RequestMapping(value = "/learn", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public void learnItem(@RequestBody @Valid LearnItemCommand command) {
+        Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = ((UserDetails) userDetails).getUsername();
+        int userID = authApplicationService.getUserIdByUsername(username);
+        memoxApplicationService.learnItem(command, userID);
     }
 }

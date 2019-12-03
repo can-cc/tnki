@@ -11,13 +11,14 @@ import java.util.List;
 @Component
 public class SuperMemoX implements Memo {
     final private PeriodicCalculator periodicCalculator;
-    final private MemoRepository memoRepository;
     final private MemoItemRepository memoItemRepository;
 
 
-    public SuperMemoX(PeriodicCalculator periodicCalculator, MemoRepository memoRepository, MemoItemRepository memoItemRepository) {
+    public SuperMemoX(
+            PeriodicCalculator periodicCalculator,
+            MemoItemRepository memoItemRepository
+    ) {
         this.periodicCalculator = periodicCalculator;
-        this.memoRepository = memoRepository;
         this.memoItemRepository = memoItemRepository;
     }
 
