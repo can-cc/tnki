@@ -32,16 +32,14 @@ public class MemoxApplicationService {
         this.periodicCalculator = periodicCalculator;
     }
 
-    int createLearnItem(CreateLearnItemCommand command) {
+    int createLearnItem(CreateLearnItemCommand command, int userID) {
         MemoItem item = memoItemFactory.create(command);
-        memoItemRepository.insertItem(item);
+        memoItemRepository.insertItem(item, userID);
         log.info("Created learn item [{}].", item.getID());
         return item.getID();
     }
 
-    void userDailyCheckIn(String username) {
-        int userID = authApplicationService.getUserIdByUsername(username);
-
+    void userDailyCheckIn(int userID) {
         int learningCount = memoItemRepository.countUserLearningItem(userID);
         UserLearnSetting userLearnSetting = memoUserSettingRepository.findUserLearnSetting(userID);
         int learnNewNumber = userLearnSetting.getDailyLearnNumber() - learningCount;
