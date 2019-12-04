@@ -4,6 +4,7 @@ import com.tnki.core.auth.AuthApplicationService;
 import com.tnki.core.memox.command.CreateLearnItemCommand;
 import com.tnki.core.memox.command.LearnItemCommand;
 import com.tnki.core.memox.exception.DailyCheckInException;
+import com.tnki.core.memox.model.MemoLearningItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 @RestController
 public class MemoxController {
@@ -68,10 +70,10 @@ public class MemoxController {
     @RequestMapping(value = "/daily-learn-item", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public void getDailyLearnItem() {
+    public List<MemoLearningItem> getDailyLearnItem() {
         Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = ((UserDetails) userDetails).getUsername();
         int userID = authApplicationService.getUserIdByUsername(username);
-        memoxApplicationService.getDailyLearnItem(userID);
+        return memoxApplicationService.getDailyLearnItem(userID);
     }
 }

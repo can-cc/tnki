@@ -80,19 +80,21 @@ public class MemoItemRepositoryImpl extends BaseRepository implements MemoItemRe
         paramMap.put("memoItemID", memoLearningItem.getMemoItem().getID());
         paramMap.put("ef", memoLearningItem.getEF());
         paramMap.put("learnTime", memoLearningItem.getLearnTime());
-        jdbcTemplate.update("INSERT INTO user_learn_item(user_id, item_id, ef, n, is_learning) VALUES (:userID, :memoItemID, :ef, :learnTime, true)", paramMap);
+        paramMap.put("next_learn_date", memoLearningItem.getNextLearnDate());
+        jdbcTemplate.update("INSERT INTO user_learn_item(user_id, item_id, ef, n, is_learning, next_learn_date) VALUES (:userID, :memoItemID, :ef, :learnTime, true, :next_learn_date)", paramMap);
     }
 
     @Override
     public List<MemoLearningItem> listUserDailyLearnItem(int userID, Date today) {
         MapSqlParameterSource parameter = new MapSqlParameterSource();
         parameter.addValue("userID", userID);
+        parameter.addValue("date", today);
 
         MemoLearningItemMapper memoLearningItemMapper =  new MemoLearningItemMapper(userID);
         return jdbcTemplate.query(
-                "SELECT a.user_id, a.ef, a.n a.next_learn_date, b.id, b.front, b.back, b.tip from user_learn_item as a \n" +
+                "SELECT a.user_id, a.ef, a.n, a.next_learn_date, b.id, b.front, b.back, b.tip from user_learn_item as a \n" +
                         "LEFT JOIN learn_item as b ON a.item_id = b.id \n" +
-                        "WHERE a.user_id = :userId",
+                        "WHERE a.user_id = :userID AND a.next_learn_date <= :date;",
                 parameter,
                 memoLearningItemMapper
         );
