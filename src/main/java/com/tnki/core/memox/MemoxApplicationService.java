@@ -55,7 +55,7 @@ public class MemoxApplicationService {
             return;
         }
 
-        List<MemoItem> memoItems = memoItemRepository.listUserUnStartedItems(userID, learnNewNumber);
+        List<MemoItem> memoItems = memoItemRepository.listUserNotLearnItems(userID, learnNewNumber);
         memoItems.parallelStream().forEach(memoItem -> memo.startLearnItem(memoItem, userID));
     }
 

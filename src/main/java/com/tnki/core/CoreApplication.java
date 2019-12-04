@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import javax.annotation.PostConstruct;
 import java.util.TimeZone;
 
-import static java.time.ZoneId.of;
 import static java.util.TimeZone.getTimeZone;
 
 @SpringBootApplication
@@ -18,6 +17,6 @@ public class CoreApplication {
 
     @PostConstruct
     void started() {
-        TimeZone.setDefault(getTimeZone(of("Asia/Shanghai")));
+        TimeZone.setDefault(getTimeZone("UTC"));
     }
 }

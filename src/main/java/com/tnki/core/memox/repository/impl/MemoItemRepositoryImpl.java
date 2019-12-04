@@ -37,14 +37,14 @@ public class MemoItemRepositoryImpl extends BaseRepository implements MemoItemRe
     }
 
     @Override
-    public List<MemoItem> listUserUnStartedItems(int userID, int limit) {
+    public List<MemoItem> listUserNotLearnItems(int userID, int limit) {
         MapSqlParameterSource parameter = new MapSqlParameterSource();
         parameter.addValue("userID", userID);
         parameter.addValue("limit", limit);
         return jdbcTemplate.query(
                 "SELECT a.id, a.front, a.back, a.tip from learn_item as a \n" +
                         "LEFT JOIN user_create_item_relation as c ON a.id = c.item_id \n" +
-                        "LEFT JOIN user_learn_item as b ON a.id = b.user_id \n" +
+                        "LEFT JOIN user_learn_item as b ON c.user_id = b.user_id \n" +
                         "WHERE b.user_id IS NULL AND c.user_id = :userID LIMIT :limit",
                 parameter,
                 new MemoItemMapper()
@@ -127,7 +127,11 @@ public class MemoItemRepositoryImpl extends BaseRepository implements MemoItemRe
 
             MemoItemFactory memoItemFactory = new MemoItemFactory();
 
-            return memoItemFactory.createMemoLearningItem(memoItem, userID);
+            MemoLearningItem memoLearningItem =  memoItemFactory.createMemoLearningItem(memoItem, userID);
+            memoLearningItem.setEF(resultSet.getDouble("ef"));
+            memoLearningItem.setLearnTime(resultSet.getInt("n"));
+            memoLearningItem.setNextLearnDate(resultSet.getDate("next_learn_date"));
+            return memoLearningItem;
         }
     }
 }

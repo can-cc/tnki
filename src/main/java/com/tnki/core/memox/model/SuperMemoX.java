@@ -13,7 +13,6 @@ public class SuperMemoX implements Memo {
     final private PeriodicCalculator periodicCalculator;
     final private MemoItemRepository memoItemRepository;
 
-
     public SuperMemoX(
             PeriodicCalculator periodicCalculator,
             MemoItemRepository memoItemRepository
