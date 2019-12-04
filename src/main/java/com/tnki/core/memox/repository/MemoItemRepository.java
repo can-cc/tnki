@@ -3,6 +3,7 @@ package com.tnki.core.memox.repository;
 import com.tnki.core.memox.model.MemoItem;
 import com.tnki.core.memox.model.MemoLearningItem;
 
+import java.util.Date;
 import java.util.List;
 
 public interface MemoItemRepository {
@@ -11,4 +12,5 @@ public interface MemoItemRepository {
     int countUserLearningItem(int userID);
     void insertItem(MemoItem item, int userID);
     void insertLearningItem(MemoLearningItem memoLearningItem);
+    List<MemoLearningItem> listUserDailyLearnItem(int userID, Date today);
 }

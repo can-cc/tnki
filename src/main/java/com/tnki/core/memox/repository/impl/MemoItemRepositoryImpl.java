@@ -1,6 +1,7 @@
 package com.tnki.core.memox.repository.impl;
 
 import com.tnki.core.memox.model.MemoItem;
+import com.tnki.core.memox.model.MemoItemFactory;
 import com.tnki.core.memox.model.MemoLearningItem;
 import com.tnki.core.memox.repository.MemoItemRepository;
 import com.tnki.core.share.model.BaseRepository;
@@ -16,10 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Component
 public class MemoItemRepositoryImpl extends BaseRepository implements MemoItemRepository {
@@ -85,6 +83,21 @@ public class MemoItemRepositoryImpl extends BaseRepository implements MemoItemRe
         jdbcTemplate.update("INSERT INTO user_learn_item(user_id, item_id, ef, n, is_learning) VALUES (:userID, :memoItemID, :ef, :learnTime, true)", paramMap);
     }
 
+    @Override
+    public List<MemoLearningItem> listUserDailyLearnItem(int userID, Date today) {
+        MapSqlParameterSource parameter = new MapSqlParameterSource();
+        parameter.addValue("userID", userID);
+
+        MemoLearningItemMapper memoLearningItemMapper =  new MemoLearningItemMapper(userID);
+        return jdbcTemplate.query(
+                "SELECT a.user_id, a.ef, a.n a.next_learn_date, b.id, b.front, b.back, b.tip from user_learn_item as a \n" +
+                        "LEFT JOIN learn_item as b ON a.item_id = b.id \n" +
+                        "WHERE a.user_id = :userId",
+                parameter,
+                memoLearningItemMapper
+        );
+    }
+
     private static final class MemoItemMapper implements RowMapper<MemoItem> {
         public MemoItem mapRow(ResultSet resultSet, int rowNum) throws SQLException {
             MemoItem memoItem = new MemoItem();
@@ -93,6 +106,26 @@ public class MemoItemRepositoryImpl extends BaseRepository implements MemoItemRe
             memoItem.setFront(resultSet.getString("back"));
             memoItem.setTip(resultSet.getString("tip"));
             return memoItem;
+        }
+    }
+
+    private static final class MemoLearningItemMapper implements RowMapper<MemoLearningItem> {
+        private int userID;
+
+        private MemoLearningItemMapper(int userID) {
+            this.userID = userID;
+        }
+
+        public MemoLearningItem mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+            MemoItem memoItem = new MemoItem();
+            memoItem.setID(resultSet.getInt("id"));
+            memoItem.setFront(resultSet.getString("front"));
+            memoItem.setBack(resultSet.getString("back"));
+            memoItem.setTip(resultSet.getString("tip"));
+
+            MemoItemFactory memoItemFactory = new MemoItemFactory();
+
+            return memoItemFactory.createMemoLearningItem(memoItem, userID);
         }
     }
 }

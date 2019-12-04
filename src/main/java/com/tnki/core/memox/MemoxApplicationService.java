@@ -1,6 +1,5 @@
 package com.tnki.core.memox;
 
-import com.tnki.core.auth.AuthApplicationService;
 import com.tnki.core.memox.command.CreateLearnItemCommand;
 import com.tnki.core.memox.command.LearnItemCommand;
 import com.tnki.core.memox.model.*;
@@ -41,7 +40,7 @@ public class MemoxApplicationService {
     }
 
     int createLearnItem(CreateLearnItemCommand command, int userID) {
-      MemoItem item = memoItemFactory.create(command);
+      MemoItem item = memoItemFactory.createMemoItemFromCommand(command);
         memoItemRepository.insertItem(item, userID);
         log.info("Created learn item [{}].", item.getID());
         return item.getID();
@@ -63,5 +62,9 @@ public class MemoxApplicationService {
     void learnItem(LearnItemCommand learnItemCommand, int userID) {
         MemoItem memoItem = memoItemRepository.findMemoItem(learnItemCommand.getItemID());
         memo.learnItem(memoItem, userID, learnItemCommand.getMemoQuality());
+    }
+
+     List<MemoLearningItem> getDailyLearnItem(int userID) {
+        return memoItemRepository.listUserDailyLearnItem(userID, MemoDateUtil.today());
     }
 }

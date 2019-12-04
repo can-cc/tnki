@@ -6,11 +6,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class MemoItemFactory {
 
-    public MemoItem create(CreateLearnItemCommand command) {
+    public MemoItem createMemoItemFromCommand(CreateLearnItemCommand command) {
         MemoItem item = new MemoItem();
         item.setFront(command.getFront());
         item.setTip(command.getTip());
         item.setBack(command.getBack());
         return item;
     }
+
+    public MemoLearningItem createMemoLearningItem(MemoItem memoItem, int userID) {
+        return new MemoLearningItem(memoItem, userID);
+    }
+
 }
