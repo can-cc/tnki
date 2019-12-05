@@ -1,7 +1,6 @@
 package com.tnki.core.memox.model;
 
 import com.tnki.core.memox.repository.MemoItemRepository;
-import com.tnki.core.memox.repository.MemoRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;

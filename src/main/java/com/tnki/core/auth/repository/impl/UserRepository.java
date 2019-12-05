@@ -3,7 +3,6 @@ package com.tnki.core.auth.repository.impl;
 import com.tnki.core.auth.model.User;
 import com.tnki.core.share.model.BaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
