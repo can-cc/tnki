@@ -12,20 +12,17 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
+
+import java.util.Objects;
 
 @Repository
 public class UserRepository extends BaseRepository implements com.tnki.core.auth.repository.UserRepository {
-    final
-    private NamedParameterJdbcTemplate jdbcTemplate;
-
-    private PasswordEncoder passwordEncoder;
+    final private NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired
-    public UserRepository(NamedParameterJdbcTemplate jdbcTemplate, @Qualifier("PasswordEncoder") PasswordEncoder passwordEncoder) {
+    public UserRepository(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -47,7 +44,7 @@ public class UserRepository extends BaseRepository implements com.tnki.core.auth
         SqlParameterSource parameters = new BeanPropertySqlParameterSource(user);
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update("INSERT INTO user(username, password_hash) VALUES (:username, :passwordHash)", parameters, keyHolder);
-        user.setID(keyHolder.getKey().intValue());
+        user.setID(Objects.requireNonNull(keyHolder.getKey()).intValue());
     }
 
     @Override
