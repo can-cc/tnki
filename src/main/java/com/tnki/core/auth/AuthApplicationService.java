@@ -20,11 +20,11 @@ public class AuthApplicationService {
         this.userRepository = userRepository;
     }
 
-    public void login(LoginCommand command) {
+    void login(LoginCommand command) {
         securityService.autoLogin(command.username, command.password);
     }
 
-    public void signUp(SignUpCommand command) {
+    void signUp(SignUpCommand command) {
         securityService.registerNewUser(command);
     }
 
