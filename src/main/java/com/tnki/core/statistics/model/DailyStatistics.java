@@ -13,5 +13,4 @@ public class DailyStatistics {
         this.learnedNumber = learnedNumber;
         this.needLearnNumber = needLearnNumber;
     }
-
 }

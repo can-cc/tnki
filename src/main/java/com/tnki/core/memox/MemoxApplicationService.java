@@ -6,6 +6,7 @@ import com.tnki.core.memox.model.*;
 import com.tnki.core.memox.repository.MemoItemRepository;
 import com.tnki.core.memox.repository.MemoRepository;
 import com.tnki.core.memox.repository.MemoUserSettingRepository;
+import com.tnki.core.memox.repository.UserDailyCheckInRecordRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class MemoxApplicationService {
     final private MemoRepository memoRepository;
     final private MemoUserSettingRepository memoUserSettingRepository;
     final private PeriodicCalculator periodicCalculator;
+    final private UserDailyCheckInRecordRepository userDailyCheckInRecordRepository;
     final private Memo memo;
 
     @Autowired
@@ -29,6 +31,7 @@ public class MemoxApplicationService {
             MemoRepository memoRepository,
             MemoUserSettingRepository memoUserSettingRepository,
             PeriodicCalculator periodicCalculator,
+            UserDailyCheckInRecordRepository userDailyCheckInRecordRepository,
             Memo memo
     ) {
         this.memoItemFactory = memoItemFactory;
@@ -36,6 +39,7 @@ public class MemoxApplicationService {
         this.memoRepository = memoRepository;
         this.memoUserSettingRepository = memoUserSettingRepository;
         this.periodicCalculator = periodicCalculator;
+        this.userDailyCheckInRecordRepository = userDailyCheckInRecordRepository;
         this.memo = memo;
     }
 
@@ -47,16 +51,11 @@ public class MemoxApplicationService {
     }
 
     void userDailyCheckIn(int userID) {
-        int learningCount = memoItemRepository.countUserLearningItem(userID);
-        UserLearnSetting userLearnSetting = memoUserSettingRepository.findUserLearnSetting(userID);
-        int learnNewNumber = userLearnSetting.getDailyLearnNumber() - learningCount;
-
-        if (learnNewNumber <= 0) {
-            return;
+        UserDailyCheckInRecord userDailyCheckInRecord = userDailyCheckInRecordRepository.findUserDailyCheckInRecord(userID, MemoDateUtil.today());
+        if (userDailyCheckInRecord == null) {
+            memo.fillItemToLearn(userID);
+            userDailyCheckInRecordRepository.insertUserDailyCheckInRecord(userID, MemoDateUtil.today());
         }
-
-        List<MemoItem> memoItems = memoItemRepository.listUserNotLearnItems(userID, learnNewNumber);
-        memoItems.parallelStream().forEach(memoItem -> memo.startLearnItem(memoItem, userID));
     }
 
     void learnItem(LearnItemCommand learnItemCommand, int userID) {
@@ -65,6 +64,6 @@ public class MemoxApplicationService {
     }
 
      List<MemoLearningItem> getDailyLearnItem(int userID) {
-        return memoItemRepository.listUserDailyLearnItem(userID, MemoDateUtil.today());
+       return memo.getLearningItem(userID);
     }
 }

@@ -21,14 +21,12 @@ public class AuthController {
     }
 
     @RequestMapping(value = "/signin", method = RequestMethod.POST)
-    public String signin(@RequestBody @Valid LoginCommand command) {
+    public void signin(@RequestBody @Valid LoginCommand command) {
         authApplicationService.login(command);
-        return "OK";
     }
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
-    public String signup(@RequestBody @Valid SignUpCommand command) {
+    public void signup(@RequestBody @Valid SignUpCommand command) {
         authApplicationService.signUp(command);
-        return "OK";
     }
 }

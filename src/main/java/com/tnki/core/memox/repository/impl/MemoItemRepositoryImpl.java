@@ -73,6 +73,7 @@ public class MemoItemRepositoryImpl extends BaseRepository implements MemoItemRe
         jdbcTemplate.update("INSERT INTO user_create_item_relation (user_id, item_id) VALUES (:userID, :itemID)", memoRelationParams);
     }
 
+    @Transactional
     @Override
     public void insertLearningItem(MemoLearningItem memoLearningItem) {
         Map<String, Object> paramMap = new HashMap<>();
