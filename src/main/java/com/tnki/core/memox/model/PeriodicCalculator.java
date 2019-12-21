@@ -6,5 +6,4 @@ public interface PeriodicCalculator {
     Date calcNextLearnDate(MemoLearningItem item);
     Date getStartLearnDate();
     double calcNextEF(double lastEF, int memoQuality);
-
 }

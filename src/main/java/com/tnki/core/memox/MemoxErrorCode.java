@@ -3,7 +3,8 @@ package com.tnki.core.memox;
 import com.tnki.core.share.exception.ErrorCode;
 
 public enum MemoxErrorCode implements ErrorCode {
-   DailyCheckInError(500, " Check in fail ");
+    DailyCheckInError(500, " Check in fail "),
+    MemoQualityOutRangeError(403, " memo quality out of range ");
 
     private int status;
     private String message;

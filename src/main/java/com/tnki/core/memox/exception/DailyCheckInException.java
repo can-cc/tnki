@@ -10,9 +10,6 @@ public class DailyCheckInException extends AppException {
         super(cause, DailyCheckInError, of("username", username));
     }
 
-    public DailyCheckInException(String username) {
-        super(DailyCheckInError, of("username", username));
-    }
 }
 
 
