@@ -12,5 +12,6 @@ public interface MemoItemRepository {
     int countUserLearningItem(int userID);
     void insertItem(MemoItem item, int userID);
     void insertLearningItem(MemoLearningItem memoLearningItem);
+    void updateLearningItem(MemoLearningItem memoLearningItem);
     List<MemoLearningItem> listUserDailyLearnItem(int userID, Date today);
 }

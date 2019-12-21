@@ -86,6 +86,21 @@ public class MemoItemRepositoryImpl extends BaseRepository implements MemoItemRe
     }
 
     @Override
+    public void updateLearningItem(MemoLearningItem memoLearningItem) {
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("userID", memoLearningItem.getUserID());
+        paramMap.put("memoItemID", memoLearningItem.getMemoItem().getID());
+        paramMap.put("ef", memoLearningItem.getEF());
+        paramMap.put("nextLearnDate", memoLearningItem.getNextLearnDate());
+        paramMap.put("learnTime", memoLearningItem.getLearnTime());
+        jdbcTemplate.update(
+                "UPDATE user_learn_item SET n = :learnTime, is_learning = :isLearning, ef = :ef, next_learn_date = :nextLearnDate " +
+                        "WHERE item_id = :memoItemID AND user_id = :userID",
+                paramMap
+        );
+    }
+
+    @Override
     public List<MemoLearningItem> listUserDailyLearnItem(int userID, Date today) {
         MapSqlParameterSource parameter = new MapSqlParameterSource();
         parameter.addValue("userID", userID);

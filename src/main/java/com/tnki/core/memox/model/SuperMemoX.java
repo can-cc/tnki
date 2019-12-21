@@ -38,6 +38,7 @@ public class SuperMemoX implements Memo {
         learningItem.setEF(nextEF);
         learningItem.setLearnTime(learningItem.getLearnTime() + 1);
         learningItem.setNextLearnDate((nextLearningDate));
+        this.memoItemRepository.updateLearningItem(learningItem);
         return learningItem;
     }
 

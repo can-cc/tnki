@@ -6,7 +6,7 @@ import lombok.Setter;
 
 import java.util.Date;
 
-@JsonIgnoreProperties(value = { "userID" })
+@JsonIgnoreProperties(value = {"userID"})
 @Getter
 @Setter
 public class MemoLearningItem {
@@ -15,6 +15,7 @@ public class MemoLearningItem {
     private double EF;
     private Date nextLearnDate;
     private MemoItem memoItem;
+    private boolean isLearning;
 
     MemoLearningItem(MemoItem item, int userID) {
         this.setMemoItem(item);

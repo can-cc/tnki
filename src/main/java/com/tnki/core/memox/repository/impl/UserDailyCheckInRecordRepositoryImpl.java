@@ -3,8 +3,8 @@ package com.tnki.core.memox.repository.impl;
 import com.tnki.core.memox.model.UserDailyCheckInRecord;
 import com.tnki.core.memox.repository.UserDailyCheckInRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,14 +38,19 @@ public class UserDailyCheckInRecordRepositoryImpl implements UserDailyCheckInRec
     public
     @Nullable
     UserDailyCheckInRecord findUserDailyCheckInRecord(int userID, Date date) {
-        MapSqlParameterSource parameters = new MapSqlParameterSource();
-        parameters.addValue("userID", userID);
-        parameters.addValue("date", date);
-        return jdbcTemplate.queryForObject(
-                "SELECT user_id, date, time from user_daily_check_in_record WHERE user_id = :userID AND date = :date",
-                parameters,
-                new UserDailyCheckInRecordRepositoryImpl.UserDailyCheckInRecordMapper()
-        );
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("userID", userID);
+        paramMap.put("date", date);
+        try {
+            return jdbcTemplate.queryForObject(
+                    "SELECT user_id, date, time from user_daily_check_in_record WHERE user_id = :userID AND DATE(date) = DATE(:date)",
+                    paramMap,
+                    new UserDailyCheckInRecordRepositoryImpl.UserDailyCheckInRecordMapper()
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+
     }
 
     @Transactional
@@ -53,7 +58,10 @@ public class UserDailyCheckInRecordRepositoryImpl implements UserDailyCheckInRec
     public void increaseUserDailyCheckInRecord(int userID, Date date, UserDailyCheckInRecord userDailyCheckInRecord) {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("time", userDailyCheckInRecord.getTime());
-        jdbcTemplate.update("UPDATE user_daily_check_in_record SET time = :time", paramMap);
+        paramMap.put("userID", userID);
+        paramMap.put("date", date);
+        jdbcTemplate.update("UPDATE user_daily_check_in_record SET time = :time " +
+                "WHERE user_id = :userID and DATE(date) = DATE(:date)", paramMap);
     }
 
     private static final class UserDailyCheckInRecordMapper implements RowMapper<UserDailyCheckInRecord> {
