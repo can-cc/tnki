@@ -32,7 +32,7 @@ public class MemoItemRepositoryImpl extends BaseRepository implements MemoItemRe
     @Nullable
     public MemoItem findMemoItem(int memoItemID) {
         return jdbcTemplate.queryForObject(
-                "SELECT id, front, back, tip from learn_item WHERE id = :id",
+                "SELECT id, front, back, tip, created_at, updated_at from learn_item WHERE id = :id",
                 new MapSqlParameterSource("id", memoItemID),
                 new MemoItemMapper()
         );
@@ -45,7 +45,9 @@ public class MemoItemRepositoryImpl extends BaseRepository implements MemoItemRe
         parameter.addValue("userID", userID);
         parameter.addValue("memoItemID", memoItemID);
         return jdbcTemplate.queryForObject(
-                "SELECT a.user_id, a.ef, a.n, a.next_learn_date, a.is_learning, b.id, b.front, b.back, b.tip from user_learn_item as a " +
+                "SELECT a.user_id, a.ef, a.n, a.next_learn_date, a.is_learning, a.created_at as item_created_at, a.updated_at as item_updated_at, " +
+                        "b.id, b.front, b.back, b.tip, b.created_at as learn_created_at, b.updated_at as learn_updated_at " +
+                        "from user_learn_item as a " +
                         "LEFT JOIN learn_item as b ON a.item_id = b.id " +
                         "WHERE a.user_id = :userID AND a.item_ID = :memoItemID",
                 parameter,
@@ -59,9 +61,9 @@ public class MemoItemRepositoryImpl extends BaseRepository implements MemoItemRe
         parameter.addValue("userID", userID);
         parameter.addValue("limit", limit);
         return jdbcTemplate.query(
-                "SELECT a.id, a.front, a.back, a.tip from learn_item as a \n" +
-                        "LEFT JOIN user_create_item_relation as c ON a.id = c.item_id \n" +
-                        "LEFT JOIN user_learn_item as b ON c.user_id = b.user_id \n" +
+                "SELECT a.id, a.front, a.back, a.tip, a.created_at, a.updated_at from learn_item as a " +
+                        "LEFT JOIN user_create_item_relation as c ON a.id = c.item_id " +
+                        "LEFT JOIN user_learn_item as b ON c.user_id = b.user_id " +
                         "WHERE b.user_id IS NULL AND c.user_id = :userID LIMIT :limit",
                 parameter,
                 new MemoItemMapper()
@@ -126,8 +128,10 @@ public class MemoItemRepositoryImpl extends BaseRepository implements MemoItemRe
 
         MemoLearningItemMapper memoLearningItemMapper =  new MemoLearningItemMapper(userID);
         return jdbcTemplate.query(
-                "SELECT a.user_id, a.ef, a.n, a.next_learn_date, a.is_learning, b.id, b.front, b.back, b.tip from user_learn_item as a \n" +
-                        "LEFT JOIN learn_item as b ON a.item_id = b.id \n" +
+                "SELECT a.user_id, a.ef, a.n, a.next_learn_date, a.is_learning, a.created_at as item_created_at, a.updated_at as item_updated_at, " +
+                        "b.id, b.front, b.back, b.tip, b.created_at as learn_created_at, b.updated_at as learn_updated_at " +
+                        "from user_learn_item as a " +
+                        "LEFT JOIN learn_item as b ON a.item_id = b.id " +
                         "WHERE a.user_id = :userID AND a.next_learn_date <= :date;",
                 parameter,
                 memoLearningItemMapper
@@ -141,6 +145,8 @@ public class MemoItemRepositoryImpl extends BaseRepository implements MemoItemRe
             memoItem.setFront(resultSet.getString("front"));
             memoItem.setFront(resultSet.getString("back"));
             memoItem.setTip(resultSet.getString("tip"));
+            memoItem.setCreatedAt(resultSet.getDate("created_at"));
+            memoItem.setUpdatedAt(resultSet.getDate("updated_at"));
             return memoItem;
         }
     }
@@ -158,6 +164,8 @@ public class MemoItemRepositoryImpl extends BaseRepository implements MemoItemRe
             memoItem.setFront(resultSet.getString("front"));
             memoItem.setBack(resultSet.getString("back"));
             memoItem.setTip(resultSet.getString("tip"));
+            memoItem.setCreatedAt(resultSet.getDate("item_created_at"));
+            memoItem.setUpdatedAt(resultSet.getDate("item_updated_at"));
 
             MemoItemFactory memoItemFactory = new MemoItemFactory();
 
@@ -166,6 +174,8 @@ public class MemoItemRepositoryImpl extends BaseRepository implements MemoItemRe
             memoLearningItem.setLearnTime(resultSet.getInt("n"));
             memoLearningItem.setLearning(resultSet.getBoolean("is_learning"));
             memoLearningItem.setNextLearnDate(resultSet.getDate("next_learn_date"));
+            memoItem.setCreatedAt(resultSet.getDate("learn_created_at"));
+            memoItem.setUpdatedAt(resultSet.getDate("learn_updated_at"));
             return memoLearningItem;
         }
     }

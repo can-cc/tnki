@@ -10,6 +10,7 @@ import java.util.List;
 
 @Component
 public class SuperMemoX implements Memo {
+    public static final double LEARN_ITEM_INITIAL_EF = 1.3;
     final private PeriodicCalculator periodicCalculator;
     final private MemoItemRepository memoItemRepository;
     final private MemoUserSettingRepository memoUserSettingRepository;
@@ -30,13 +31,13 @@ public class SuperMemoX implements Memo {
     }
 
     @Override
-    public MemoLearningItem learnItem(MemoLearningItem memoLearningItem, int userID, int memoQuality) {
+    public MemoLearningItem learnItem(MemoLearningItem memoLearningItem, int memoQuality) {
         Date nextLearningDate = periodicCalculator.calcNextLearnDate(memoLearningItem);
         double nextEF = periodicCalculator.calcNextEF(memoLearningItem.getEF(), memoQuality);
 
         memoLearningItem.setEF(nextEF);
         memoLearningItem.setLearnTime(memoLearningItem.getLearnTime() + 1);
-        memoLearningItem.setNextLearnDate((nextLearningDate));
+        memoLearningItem.setNextLearnDate(nextLearningDate);
         this.memoItemRepository.updateLearningItem(memoLearningItem);
         return memoLearningItem;
     }
@@ -44,7 +45,6 @@ public class SuperMemoX implements Memo {
     @Transactional
     @Override
     public void startLearnItem(MemoItem memoItem, int userID) {
-        double LEARN_ITEM_INITIAL_EF = 1.3;
         MemoLearningItem memoLearningItem = new MemoLearningItem(memoItem, userID);
         memoLearningItem.setLearnTime(0);
         memoLearningItem.setEF(LEARN_ITEM_INITIAL_EF);

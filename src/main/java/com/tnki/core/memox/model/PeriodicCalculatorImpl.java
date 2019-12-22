@@ -4,10 +4,9 @@ import com.tnki.core.memox.exception.MemoQualityOutRangeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
 import java.util.Date;
 
-// memoQuality
+// memoQuality:
 // 5 - perfect response
 // 4 - correct response after a hesitation
 // 3 - correct response recalled with serious difficulty
@@ -56,5 +55,4 @@ public class PeriodicCalculatorImpl implements PeriodicCalculator {
         }
         return ef;
     }
-
 }
