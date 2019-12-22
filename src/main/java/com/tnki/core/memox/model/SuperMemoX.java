@@ -30,16 +30,15 @@ public class SuperMemoX implements Memo {
     }
 
     @Override
-    public MemoLearningItem learnItem(MemoItem item, int userID, int memoQuality) {
-        MemoLearningItem learningItem = new MemoLearningItem(item, userID);
-        Date nextLearningDate = periodicCalculator.calcNextLearnDate(learningItem);
-        double nextEF = periodicCalculator.calcNextEF(learningItem.getEF(), memoQuality);
+    public MemoLearningItem learnItem(MemoLearningItem memoLearningItem, int userID, int memoQuality) {
+        Date nextLearningDate = periodicCalculator.calcNextLearnDate(memoLearningItem);
+        double nextEF = periodicCalculator.calcNextEF(memoLearningItem.getEF(), memoQuality);
 
-        learningItem.setEF(nextEF);
-        learningItem.setLearnTime(learningItem.getLearnTime() + 1);
-        learningItem.setNextLearnDate((nextLearningDate));
-        this.memoItemRepository.updateLearningItem(learningItem);
-        return learningItem;
+        memoLearningItem.setEF(nextEF);
+        memoLearningItem.setLearnTime(memoLearningItem.getLearnTime() + 1);
+        memoLearningItem.setNextLearnDate((nextLearningDate));
+        this.memoItemRepository.updateLearningItem(memoLearningItem);
+        return memoLearningItem;
     }
 
     @Transactional
@@ -54,7 +53,8 @@ public class SuperMemoX implements Memo {
     }
 
     @Override
-    public void finishLearnItem(MemoLearningItem item) {}
+    public void finishLearnItem(MemoLearningItem item) {
+    }
 
     @Transactional
     @Override

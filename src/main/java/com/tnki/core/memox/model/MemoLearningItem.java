@@ -15,7 +15,7 @@ public class MemoLearningItem {
     private double EF;
     private Date nextLearnDate;
     private MemoItem memoItem;
-    private boolean isLearning;
+    private boolean isLearning = true;
 
     MemoLearningItem(MemoItem item, int userID) {
         this.setMemoItem(item);

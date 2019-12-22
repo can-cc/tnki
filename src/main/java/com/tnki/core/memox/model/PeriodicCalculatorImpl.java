@@ -1,6 +1,8 @@
 package com.tnki.core.memox.model;
 
 import com.tnki.core.memox.exception.MemoQualityOutRangeException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -15,6 +17,7 @@ import java.util.Date;
 
 @Component
 public class PeriodicCalculatorImpl implements PeriodicCalculator {
+    private static final Logger logger = LoggerFactory.getLogger(PeriodicCalculatorImpl.class);
 
     private int calcNextLearnDaysNumber(int learnTime, double EF) {
         if (learnTime == 0) {
@@ -42,8 +45,16 @@ public class PeriodicCalculatorImpl implements PeriodicCalculator {
         if (memoQuality < 0 || memoQuality > 5) {
             throw new MemoQualityOutRangeException(memoQuality);
         }
-        return lastEF + (0.1 - (5 - memoQuality)) * ((0.08 + (5 - memoQuality) * 0.02));
+        double ef = (lastEF + (0.1 - (5 - memoQuality)) * ((0.08 + (5 - memoQuality) * 0.02)));
+        return limitEF(ef);
     }
 
+    private double limitEF(double ef) {
+        if (ef < 1.3) {
+            logger.warn("calc ef less than 1.3; ef = " + ef);
+            ef = 1.3;
+        }
+        return ef;
+    }
 
 }

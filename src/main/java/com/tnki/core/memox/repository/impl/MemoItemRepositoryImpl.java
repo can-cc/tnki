@@ -15,6 +15,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Nullable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -28,11 +29,27 @@ public class MemoItemRepositoryImpl extends BaseRepository implements MemoItemRe
     }
 
     @Override
+    @Nullable
     public MemoItem findMemoItem(int memoItemID) {
         return jdbcTemplate.queryForObject(
                 "SELECT id, front, back, tip from learn_item WHERE id = :id",
                 new MapSqlParameterSource("id", memoItemID),
                 new MemoItemMapper()
+        );
+    }
+
+    @Override
+    @Nullable
+    public MemoLearningItem findMemoLearningItem(int memoItemID, int userID) {
+        MapSqlParameterSource parameter = new MapSqlParameterSource();
+        parameter.addValue("userID", userID);
+        parameter.addValue("memoItemID", memoItemID);
+        return jdbcTemplate.queryForObject(
+                "SELECT a.user_id, a.ef, a.n, a.next_learn_date, a.is_learning, b.id, b.front, b.back, b.tip from user_learn_item as a " +
+                        "LEFT JOIN learn_item as b ON a.item_id = b.id " +
+                        "WHERE a.user_id = :userID AND a.item_ID = :memoItemID",
+                parameter,
+                new MemoLearningItemMapper(userID)
         );
     }
 
@@ -93,6 +110,7 @@ public class MemoItemRepositoryImpl extends BaseRepository implements MemoItemRe
         paramMap.put("ef", memoLearningItem.getEF());
         paramMap.put("nextLearnDate", memoLearningItem.getNextLearnDate());
         paramMap.put("learnTime", memoLearningItem.getLearnTime());
+        paramMap.put("isLearning", memoLearningItem.isLearning());
         jdbcTemplate.update(
                 "UPDATE user_learn_item SET n = :learnTime, is_learning = :isLearning, ef = :ef, next_learn_date = :nextLearnDate " +
                         "WHERE item_id = :memoItemID AND user_id = :userID",
@@ -108,7 +126,7 @@ public class MemoItemRepositoryImpl extends BaseRepository implements MemoItemRe
 
         MemoLearningItemMapper memoLearningItemMapper =  new MemoLearningItemMapper(userID);
         return jdbcTemplate.query(
-                "SELECT a.user_id, a.ef, a.n, a.next_learn_date, b.id, b.front, b.back, b.tip from user_learn_item as a \n" +
+                "SELECT a.user_id, a.ef, a.n, a.next_learn_date, a.is_learning, b.id, b.front, b.back, b.tip from user_learn_item as a \n" +
                         "LEFT JOIN learn_item as b ON a.item_id = b.id \n" +
                         "WHERE a.user_id = :userID AND a.next_learn_date <= :date;",
                 parameter,
@@ -146,6 +164,7 @@ public class MemoItemRepositoryImpl extends BaseRepository implements MemoItemRe
             MemoLearningItem memoLearningItem =  memoItemFactory.createMemoLearningItem(memoItem, userID);
             memoLearningItem.setEF(resultSet.getDouble("ef"));
             memoLearningItem.setLearnTime(resultSet.getInt("n"));
+            memoLearningItem.setLearning(resultSet.getBoolean("is_learning"));
             memoLearningItem.setNextLearnDate(resultSet.getDate("next_learn_date"));
             return memoLearningItem;
         }

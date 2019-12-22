@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface MemoItemRepository {
     MemoItem findMemoItem(int memoItem);
+    MemoLearningItem findMemoLearningItem(int memoItemID, int userID);
     List<MemoItem> listUserNotLearnItems(int userID, int limit);
     int countUserLearningItem(int userID);
     void insertItem(MemoItem item, int userID);

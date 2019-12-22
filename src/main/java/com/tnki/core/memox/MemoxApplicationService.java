@@ -59,8 +59,8 @@ public class MemoxApplicationService {
     }
 
     void learnItem(LearnItemCommand learnItemCommand, int userID) {
-        MemoItem memoItem = memoItemRepository.findMemoItem(learnItemCommand.getItemID());
-        memo.learnItem(memoItem, userID, learnItemCommand.getMemoQuality());
+        MemoLearningItem memoLearningItem = memoItemRepository.findMemoLearningItem(learnItemCommand.getItemID(), userID);
+        memo.learnItem(memoLearningItem, userID, learnItemCommand.getMemoQuality());
     }
 
      List<MemoLearningItem> getDailyLearnItem(int userID) {

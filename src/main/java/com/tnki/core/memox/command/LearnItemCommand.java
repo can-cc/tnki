@@ -1,17 +1,20 @@
 package com.tnki.core.memox.command;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Value;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Value
 public class LearnItemCommand {
     @Valid
-    @NotEmpty(message = "itemID cannot be empty")
+    @NotNull(message = "itemID cannot be empty")
+    @JsonProperty("itemID")
     private int itemID;
 
     @Valid
-    @NotEmpty(message = "memoQuality cannot be empty")
+    @NotNull(message = "memoQuality cannot be empty")
+    @JsonProperty("memoQuality")
     private int memoQuality;
 }
