@@ -1,6 +1,7 @@
 package com.tnki.core.auth.repository.impl;
 
 import com.tnki.core.auth.model.User;
+import com.tnki.core.auth.repository.UserRepository;
 import com.tnki.core.share.model.BaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -16,11 +17,11 @@ import org.springframework.stereotype.Repository;
 import java.util.Objects;
 
 @Repository
-public class UserRepository extends BaseRepository implements com.tnki.core.auth.repository.UserRepository {
+public class UserRepositoryImpl extends BaseRepository implements UserRepository {
     final private NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired
-    public UserRepository(NamedParameterJdbcTemplate jdbcTemplate) {
+    public UserRepositoryImpl(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 

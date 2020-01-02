@@ -1,7 +1,7 @@
 package com.tnki.core.auth.service.impl;
 
 import com.tnki.core.auth.model.User;
-import com.tnki.core.auth.repository.impl.UserRepository;
+import com.tnki.core.auth.repository.impl.UserRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,10 +12,10 @@ import java.util.HashSet;
 
 @Service("TnkiUserDetailsService")
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private final UserRepository userRepository;
+    private final UserRepositoryImpl userRepository;
 
     @Autowired
-    public UserDetailsServiceImpl(UserRepository userRepository) {
+    public UserDetailsServiceImpl(UserRepositoryImpl userRepository) {
         this.userRepository = userRepository;
     }
 
