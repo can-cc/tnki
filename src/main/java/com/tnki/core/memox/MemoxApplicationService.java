@@ -1,12 +1,11 @@
 package com.tnki.core.memox;
 
+import com.tnki.core.common.MemoDateUtil;
 import com.tnki.core.memox.command.CreateLearnItemCommand;
 import com.tnki.core.memox.command.LearnItemCommand;
 import com.tnki.core.memox.model.*;
-import com.tnki.core.memox.repository.MemoItemRepository;
-import com.tnki.core.memox.repository.MemoRepository;
-import com.tnki.core.memox.repository.MemoUserSettingRepository;
-import com.tnki.core.memox.repository.UserDailyCheckInRecordRepository;
+import com.tnki.core.memox.repository.*;
+import com.tnki.core.statistics.StatisticsApplicationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,52 +17,53 @@ import java.util.List;
 public class MemoxApplicationService {
     final private MemoItemFactory memoItemFactory;
     final private MemoItemRepository memoItemRepository;
-    final private MemoRepository memoRepository;
-    final private MemoUserSettingRepository memoUserSettingRepository;
-    final private PeriodicCalculator periodicCalculator;
     final private UserDailyCheckInRecordRepository userDailyCheckInRecordRepository;
-    final private Memo memo;
+    final private MemoLearnItemRepository memoLearnItemRepository;
+    final private SuperMemoX superMemoX;
+    final private StatisticsApplicationService statisticsApplicationService;
 
     @Autowired
     public MemoxApplicationService(
             MemoItemFactory memoItemFactory,
             MemoItemRepository memoItemRepository,
-            MemoRepository memoRepository,
-            MemoUserSettingRepository memoUserSettingRepository,
-            PeriodicCalculator periodicCalculator,
             UserDailyCheckInRecordRepository userDailyCheckInRecordRepository,
-            Memo memo
+            MemoLearnItemRepository memoLearnItemRepository,
+            SuperMemoX superMemoX,
+            StatisticsApplicationService statisticsApplicationService
     ) {
         this.memoItemFactory = memoItemFactory;
         this.memoItemRepository = memoItemRepository;
-        this.memoRepository = memoRepository;
-        this.memoUserSettingRepository = memoUserSettingRepository;
-        this.periodicCalculator = periodicCalculator;
         this.userDailyCheckInRecordRepository = userDailyCheckInRecordRepository;
-        this.memo = memo;
+        this.memoLearnItemRepository = memoLearnItemRepository;
+        this.superMemoX = superMemoX;
+        this.statisticsApplicationService = statisticsApplicationService;
     }
 
     int createLearnItem(CreateLearnItemCommand command, int userID) {
-      MemoItem item = memoItemFactory.createMemoItemFromCommand(command);
-        memoItemRepository.insertItem(item, userID);
+        MemoItem item = memoItemFactory.createMemoItemFromCommand(command);
+        memoItemRepository.add(item, userID);
         log.info("Created learn item [{}].", item.getID());
         return item.getID();
     }
 
-    void userDailyCheckIn(int userID) {
-        UserDailyCheckInRecord userDailyCheckInRecord = userDailyCheckInRecordRepository.findUserDailyCheckInRecord(userID, MemoDateUtil.today());
+    void checkIn(int userID) {
+        UserDailyCheckInRecord userDailyCheckInRecord = userDailyCheckInRecordRepository.find(userID, MemoDateUtil.today());
+        superMemoX.fillItemToLearn(userID);
         if (userDailyCheckInRecord == null) {
-            memo.fillItemToLearn(userID);
-            userDailyCheckInRecordRepository.insertUserDailyCheckInRecord(userID, MemoDateUtil.today());
+            userDailyCheckInRecordRepository.add(userID, MemoDateUtil.today());
+        } else {
+            userDailyCheckInRecordRepository.update(userDailyCheckInRecord);
         }
     }
 
     void learnItem(LearnItemCommand learnItemCommand, int userID) {
-        MemoLearningItem memoLearningItem = memoItemRepository.findMemoLearningItem(learnItemCommand.getItemID(), userID);
-        memo.learnItem(memoLearningItem, learnItemCommand.getMemoQuality());
+        MemoLearningItem memoLearningItem = memoLearnItemRepository.findOne(learnItemCommand.getItemID(), userID);
+        superMemoX.learnItem(memoLearningItem, learnItemCommand.getMemoQuality());
+        this.statisticsApplicationService.increaseDailyLearned(userID, 1);
     }
 
-     List<MemoLearningItem> getDailyLearnItem(int userID) {
-       return memo.getLearningItem(userID);
+    List<MemoLearningItem> getDailyLearnItem(int userID) {
+        return superMemoX.getLearningItem(userID);
     }
+
 }

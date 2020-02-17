@@ -4,6 +4,7 @@ import com.tnki.core.auth.AuthApplicationService;
 import com.tnki.core.memox.command.CreateLearnItemCommand;
 import com.tnki.core.memox.command.LearnItemCommand;
 import com.tnki.core.memox.exception.DailyCheckInException;
+import com.tnki.core.memox.model.DailyStatus;
 import com.tnki.core.memox.model.MemoLearningItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,7 +36,7 @@ public class MemoxController {
     public HashMap<String, Object> createLearnItem(@RequestBody @Valid CreateLearnItemCommand command) {
         Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = ((UserDetails) userDetails).getUsername();
-        int userID = authApplicationService.getUserIdByUsername(username);
+        int userID = authApplicationService.getIdByUsername(username);
         int id = memoxApplicationService.createLearnItem(command, userID);
         HashMap<String, Object> res = new LinkedHashMap<>();
         res.put("id", id);
@@ -49,9 +50,9 @@ public class MemoxController {
     public void dailyCheckIn() {
         Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = ((UserDetails) userDetails).getUsername();
-        int userID = authApplicationService.getUserIdByUsername(username);
+        int userID = authApplicationService.getIdByUsername(username);
         try {
-            memoxApplicationService.userDailyCheckIn(userID);
+            memoxApplicationService.checkIn(userID);
         } catch (Exception e) {
             throw new DailyCheckInException(e, username);
         }
@@ -63,7 +64,7 @@ public class MemoxController {
     public void learnItem(@RequestBody @Valid LearnItemCommand command) {
         Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = ((UserDetails) userDetails).getUsername();
-        int userID = authApplicationService.getUserIdByUsername(username);
+        int userID = authApplicationService.getIdByUsername(username);
         memoxApplicationService.learnItem(command, userID);
     }
 
@@ -73,7 +74,9 @@ public class MemoxController {
     public List<MemoLearningItem> getDailyLearnItem() {
         Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = ((UserDetails) userDetails).getUsername();
-        int userID = authApplicationService.getUserIdByUsername(username);
+        int userID = authApplicationService.getIdByUsername(username);
         return memoxApplicationService.getDailyLearnItem(userID);
     }
+
+
 }

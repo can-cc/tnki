@@ -1,5 +1,6 @@
 package com.tnki.core.memox.model;
 
+import com.tnki.core.common.MemoDateUtil;
 import com.tnki.core.memox.exception.MemoQualityOutRangeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

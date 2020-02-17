@@ -1,4 +1,4 @@
-package com.tnki.core.memox.model;
+package com.tnki.core.common;
 
 import java.util.Calendar;
 import java.util.Date;

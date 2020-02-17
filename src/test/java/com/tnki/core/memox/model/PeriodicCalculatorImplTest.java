@@ -1,6 +1,8 @@
 package com.tnki.core.memox.model;
 
 import java.util.Date;
+
+import com.tnki.core.common.MemoDateUtil;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

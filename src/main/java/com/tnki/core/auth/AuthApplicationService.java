@@ -28,7 +28,8 @@ public class AuthApplicationService {
         securityService.registerNewUser(command);
     }
 
-    public int getUserIdByUsername(String username) {
+    public int getIdByUsername(String username) {
         return userRepository.queryUserIdByUsername(username);
     }
+
 }

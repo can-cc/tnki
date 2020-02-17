@@ -27,7 +27,7 @@ public class UserDailyCheckInRecordRepositoryImpl implements UserDailyCheckInRec
 
     @Transactional
     @Override
-    public void insertUserDailyCheckInRecord(int userID, Date date) {
+    public void add(int userID, Date date) {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("userID", userID);
         paramMap.put("date", date);
@@ -37,7 +37,7 @@ public class UserDailyCheckInRecordRepositoryImpl implements UserDailyCheckInRec
     @Override
     public
     @Nullable
-    UserDailyCheckInRecord findUserDailyCheckInRecord(int userID, Date date) {
+    UserDailyCheckInRecord find(int userID, Date date) {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("userID", userID);
         paramMap.put("date", date);
@@ -50,16 +50,15 @@ public class UserDailyCheckInRecordRepositoryImpl implements UserDailyCheckInRec
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
-
     }
 
     @Transactional
     @Override
-    public void increaseUserDailyCheckInRecord(int userID, Date date, UserDailyCheckInRecord userDailyCheckInRecord) {
+    public void update(UserDailyCheckInRecord userDailyCheckInRecord) {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("time", userDailyCheckInRecord.getTime());
-        paramMap.put("userID", userID);
-        paramMap.put("date", date);
+        paramMap.put("userID", userDailyCheckInRecord.getUserID());
+        paramMap.put("date", userDailyCheckInRecord.getDate());
         jdbcTemplate.update("UPDATE user_daily_check_in_record SET time = :time " +
                 "WHERE user_id = :userID and DATE(date) = DATE(:date)", paramMap);
     }

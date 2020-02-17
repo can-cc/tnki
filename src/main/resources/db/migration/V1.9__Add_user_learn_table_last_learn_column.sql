@@ -1,0 +1,1 @@
+ALTER TABLE user_learn_item ADD COLUMN last_learn_date DATETIME;

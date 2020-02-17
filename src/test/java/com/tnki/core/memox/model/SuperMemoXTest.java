@@ -1,7 +1,9 @@
 package com.tnki.core.memox.model;
 
 import com.tnki.core.memox.repository.MemoItemRepository;
+import com.tnki.core.memox.repository.MemoLearnItemRepository;
 import com.tnki.core.memox.repository.MemoUserSettingRepository;
+import com.tnki.core.statistics.StatisticsApplicationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -14,16 +16,20 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class SuperMemoXTest {
-    private Memo memo;
+    private SuperMemoX memo;
     private MemoItemRepository memoItemRepository;
     private MemoUserSettingRepository memoUserSettingRepository;
+    private MemoLearnItemRepository memoLearnItemRepository;
+    private StatisticsApplicationService statisticsApplicationService;
 
     @BeforeEach
     void initEach() {
         PeriodicCalculator periodicCalculator = new PeriodicCalculatorImpl();
         memoItemRepository = mock(MemoItemRepository.class);
         memoUserSettingRepository = mock(MemoUserSettingRepository.class);
-        memo = new SuperMemoX(periodicCalculator, memoItemRepository, memoUserSettingRepository);
+        memoLearnItemRepository = mock(MemoLearnItemRepository.class);
+        statisticsApplicationService = mock(StatisticsApplicationService.class);
+        memo = new SuperMemoX(periodicCalculator, memoItemRepository, memoUserSettingRepository, memoLearnItemRepository, statisticsApplicationService);
     }
 
     @Test
@@ -49,7 +55,7 @@ class SuperMemoXTest {
         assertEquals(1.324, memoLearningItem.getEF());
         assertEquals(11, (memoLearningItem.getNextLearnDate().getTime() - now.getTime()) / ( 1000 * 60 * 60 * 24));
 
-        verify(memoItemRepository, times(4)).updateLearningItem(memoLearningItem);
+        verify(memoLearnItemRepository, times(4)).update(memoLearningItem);
     }
 
     @Test
@@ -60,7 +66,7 @@ class SuperMemoXTest {
         memo.startLearnItem(memoItem, userID);
 
         ArgumentCaptor<MemoLearningItem> captor = ArgumentCaptor.forClass(MemoLearningItem.class);
-        verify(memoItemRepository, times(1)).insertLearningItem(captor.capture());
+        verify(memoLearnItemRepository, times(1)).add(captor.capture());
         assertEquals(LEARN_ITEM_INITIAL_EF, captor.getValue().getEF());
         assertEquals(0, captor.getValue().getLearnTime());
         assertEquals(1002, captor.getValue().getUserID());

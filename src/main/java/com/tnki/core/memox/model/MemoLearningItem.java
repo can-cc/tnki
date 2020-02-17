@@ -14,6 +14,7 @@ public class MemoLearningItem {
     private int learnTime;
     private double EF;
     private Date nextLearnDate;
+    private Date lastLearnDate;
     private MemoItem memoItem;
     private boolean isLearning = true;
 
