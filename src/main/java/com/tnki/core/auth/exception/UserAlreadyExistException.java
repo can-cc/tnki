@@ -1,12 +1,8 @@
 package com.tnki.core.auth.exception;
 
-import com.tnki.core.share.exception.AppException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-import static com.google.common.collect.ImmutableMap.of;
-import static com.tnki.core.auth.AuthErrorCode.UserAlreadyExist;
-
-public class UserAlreadyExistException extends AppException {
-    public UserAlreadyExistException(String username) {
-        super(UserAlreadyExist, of("username", username));
-    }
+@ResponseStatus(code = HttpStatus.CONFLICT, reason = "user already exist")
+public class UserAlreadyExistException extends RuntimeException {
 }

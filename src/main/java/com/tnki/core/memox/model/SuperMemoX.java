@@ -72,7 +72,7 @@ public class SuperMemoX {
 
         List<MemoItem> memoItems = memoItemRepository.findAllUnLearned(userID, learnNewNumber);
         memoItems.parallelStream().forEach(memoItem -> startLearnItem(memoItem, userID));
-        this.statisticsApplicationService.increaseDailyTotalLearn(userID, learnNewNumber);
+        this.statisticsApplicationService.increaseDailyTotalLearn(userID, memoItems.size());
     }
 
 }

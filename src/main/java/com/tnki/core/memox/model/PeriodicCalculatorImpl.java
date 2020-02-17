@@ -43,7 +43,7 @@ public class PeriodicCalculatorImpl implements PeriodicCalculator {
     @Override
     public double calcNextEF(double lastEF, int memoQuality) {
         if (memoQuality < 0 || memoQuality > 5) {
-            throw new MemoQualityOutRangeException(memoQuality);
+            throw new MemoQualityOutRangeException();
         }
         double ef = (lastEF + (0.1 - (5 - memoQuality)) * ((0.08 + (5 - memoQuality) * 0.02)));
         return limitEF(ef);

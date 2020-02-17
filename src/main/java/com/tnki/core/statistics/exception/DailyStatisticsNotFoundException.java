@@ -1,10 +1,11 @@
 package com.tnki.core.statistics.exception;
 
-import com.tnki.core.share.exception.AppException;
-import static com.tnki.core.statistics.StatisticsErrorCode.DailyStatisticsNotFoundError;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-public class DailyStatisticsNotFoundException extends AppException {
-    public DailyStatisticsNotFoundException() {
-        super(DailyStatisticsNotFoundError, null);
-    }
+import java.util.Map;
+
+@ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "daily statistics not found")
+public class DailyStatisticsNotFoundException extends RuntimeException {
+
 }

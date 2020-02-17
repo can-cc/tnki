@@ -26,6 +26,7 @@ public class StatisticsApplicationService {
             this.dailyStatisticsRepository.update(dailyStatistics);
         } else {
             DailyStatistics dailyStatistics = DailyStatistics.create(MemoDateUtil.today());
+            dailyStatistics.setUserID(userID);
             dailyStatistics.increaseTotalShouldLearn(number);
             this.dailyStatisticsRepository.add(dailyStatistics);
         }

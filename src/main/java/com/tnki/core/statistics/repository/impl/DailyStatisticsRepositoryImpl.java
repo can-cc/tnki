@@ -1,5 +1,6 @@
 package com.tnki.core.statistics.repository.impl;
 
+import com.tnki.core.share.model.BaseRepository;
 import com.tnki.core.statistics.model.DailyStatistics;
 import com.tnki.core.statistics.repository.DailyStatisticsRepository;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -16,7 +17,7 @@ import java.util.Date;
 import java.util.Optional;
 
 @Repository
-public class DailyStatisticsRepositoryImpl implements DailyStatisticsRepository {
+public class DailyStatisticsRepositoryImpl extends BaseRepository implements DailyStatisticsRepository {
     final private NamedParameterJdbcTemplate jdbcTemplate;
 
     public DailyStatisticsRepositoryImpl(NamedParameterJdbcTemplate jdbcTemplate) {
@@ -30,7 +31,7 @@ public class DailyStatisticsRepositoryImpl implements DailyStatisticsRepository 
         parameter.addValue("date", date);
         try {
             return Optional.of(jdbcTemplate.queryForObject(
-                    "SELECT total_should_learn, learned FROM daily_learn_statistics WHERE user_id = :userID AND date = :date",
+                    "SELECT total_should_learn, learned FROM daily_learn_statistics WHERE user_id = :userID AND DATEDIFF(date, :date) = 0",
                     parameter,
                     new DailyStatisticsMapper(userID, date)
             ));
@@ -44,7 +45,6 @@ public class DailyStatisticsRepositoryImpl implements DailyStatisticsRepository 
         SqlParameterSource parameters = new BeanPropertySqlParameterSource(dailyStatistics);
         jdbcTemplate.update("INSERT INTO daily_learn_statistics(user_id, date, total_should_learn, learned) VALUES (:userID, :date, :totalShouldLearn, :learned)", parameters);
     }
-
 
     @Override
     public void update(DailyStatistics dailyStatistics) {

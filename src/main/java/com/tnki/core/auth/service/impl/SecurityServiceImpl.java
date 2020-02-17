@@ -50,7 +50,7 @@ public class SecurityServiceImpl implements SecurityService {
     @Override
     public void registerNewUser(SignUpCommand command) {
         if (userExists(command.username)) {
-            throw new UserAlreadyExistException(command.username);
+            throw new UserAlreadyExistException();
         }
 
         final User user = new User();

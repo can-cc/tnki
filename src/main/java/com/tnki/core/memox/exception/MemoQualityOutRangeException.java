@@ -1,12 +1,8 @@
 package com.tnki.core.memox.exception;
 
-import com.tnki.core.share.exception.AppException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-import static com.google.common.collect.ImmutableMap.of;
-import static com.tnki.core.memox.MemoxErrorCode.MemoQualityOutRangeError;
-
-public class MemoQualityOutRangeException extends AppException {
-    public MemoQualityOutRangeException(int value) {
-        super(MemoQualityOutRangeError, of("value", value));
-    }
+@ResponseStatus(code = HttpStatus.BAD_REQUEST, reason = "memo quality out range")
+public class MemoQualityOutRangeException extends RuntimeException {
 }

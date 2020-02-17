@@ -2,8 +2,6 @@ package com.tnki.core.statistics;
 
 import com.tnki.core.auth.AuthApplicationService;
 import com.tnki.core.common.MemoDateUtil;
-import com.tnki.core.memox.exception.MemoQualityOutRangeException;
-import com.tnki.core.memox.model.DailyStatus;
 import com.tnki.core.statistics.exception.DailyStatisticsNotFoundException;
 import com.tnki.core.statistics.model.DailyStatistics;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,5 +38,4 @@ public class StatisticsController {
         }
         return optional.get();
     }
-
 }

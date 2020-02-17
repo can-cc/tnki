@@ -1,0 +1,1 @@
+ALTER TABLE daily_learn_statistics MODIFY COLUMN date DATE;

@@ -3,8 +3,6 @@ package com.tnki.core.memox;
 import com.tnki.core.auth.AuthApplicationService;
 import com.tnki.core.memox.command.CreateLearnItemCommand;
 import com.tnki.core.memox.command.LearnItemCommand;
-import com.tnki.core.memox.exception.DailyCheckInException;
-import com.tnki.core.memox.model.DailyStatus;
 import com.tnki.core.memox.model.MemoLearningItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,11 +49,7 @@ public class MemoxController {
         Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = ((UserDetails) userDetails).getUsername();
         int userID = authApplicationService.getIdByUsername(username);
-        try {
-            memoxApplicationService.checkIn(userID);
-        } catch (Exception e) {
-            throw new DailyCheckInException(e, username);
-        }
+        memoxApplicationService.checkIn(userID);
     }
 
     @RequestMapping(value = "/learn", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -77,6 +71,4 @@ public class MemoxController {
         int userID = authApplicationService.getIdByUsername(username);
         return memoxApplicationService.getDailyLearnItem(userID);
     }
-
-
 }
