@@ -33,7 +33,7 @@ public class StatisticsController {
         String username = ((UserDetails) userDetails).getUsername();
         int userID = authApplicationService.getIdByUsername(username);
         Optional<DailyStatistics> optional = statisticsApplicationService.getDailyStatistics(userID, MemoDateUtil.today());
-        if (optional.isEmpty()) {
+        if (!optional.isPresent()) {
             throw new DailyStatisticsNotFoundException();
         }
         return optional.get();
