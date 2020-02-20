@@ -4,6 +4,5 @@ WORKDIR /app
 RUN ./gradlew build -x test
 
 FROM openjdk:8-jdk-alpine
-ARG JAR_FILE=/app/target/*.jar
-COPY --from=builder ${JAR_FILE} app.jar
+COPY --from=builder /app/build/libs/*.jar app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]
