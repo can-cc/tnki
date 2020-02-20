@@ -45,10 +45,10 @@ public class MemoItemRepositoryImpl extends BaseRepository implements MemoItemRe
         parameter.addValue("userID", userID);
         parameter.addValue("limit", limit);
         return jdbcTemplate.query(
-                "SELECT a.id, a.front, a.back, a.tip, a.created_at, a.updated_at from learn_item as a " +
-                        "LEFT JOIN user_create_item_relation as c ON a.id = c.item_id " +
-                        "LEFT JOIN user_learn_item as b ON c.user_id = b.user_id " +
-                        "WHERE b.user_id IS NULL AND c.user_id = :userID LIMIT :limit",
+                "SELECT item.* from learn_item as item " +
+                        "LEFT JOIN user_create_item_relation as relation ON item.id = relation.item_id " +
+                        "LEFT JOIN user_learn_item as learn ON relation.item_id = learn.item_id " +
+                        "WHERE relation.user_id = :userID AND learn.user_id IS NULL LIMIT :limit",
                 parameter,
                 new MemoItemMapper()
         );

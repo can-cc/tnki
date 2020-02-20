@@ -95,10 +95,11 @@ public class MemoLearnItemRepositoryImpl implements MemoLearnItemRepository {
         paramMap.put("memoItemID", memoLearningItem.getMemoItem().getID());
         paramMap.put("ef", memoLearningItem.getEF());
         paramMap.put("nextLearnDate", memoLearningItem.getNextLearnDate());
+        paramMap.put("lastLearnDate", memoLearningItem.getLastLearnDate());
         paramMap.put("learnTime", memoLearningItem.getLearnTime());
         paramMap.put("isLearning", memoLearningItem.isLearning());
         jdbcTemplate.update(
-                "UPDATE user_learn_item SET n = :learnTime, is_learning = :isLearning, ef = :ef, next_learn_date = :nextLearnDate " +
+                "UPDATE user_learn_item SET n = :learnTime, is_learning = :isLearning, ef = :ef, next_learn_date = :nextLearnDate, last_learn_date = :lastLearnDate " +
                         "WHERE item_id = :memoItemID AND user_id = :userID",
                 paramMap
         );

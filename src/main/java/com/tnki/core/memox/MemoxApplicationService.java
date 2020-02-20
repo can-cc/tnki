@@ -52,6 +52,7 @@ public class MemoxApplicationService {
         if (userDailyCheckInRecord == null) {
             userDailyCheckInRecordRepository.add(userID, MemoDateUtil.today());
         } else {
+            userDailyCheckInRecord.increaseTime();
             userDailyCheckInRecordRepository.update(userDailyCheckInRecord);
         }
     }

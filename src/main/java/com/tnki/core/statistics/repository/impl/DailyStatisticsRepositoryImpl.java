@@ -51,7 +51,7 @@ public class DailyStatisticsRepositoryImpl extends BaseRepository implements Dai
         SqlParameterSource parameters = new BeanPropertySqlParameterSource(dailyStatistics);
         jdbcTemplate.update(
                 "UPDATE daily_learn_statistics SET total_should_learn = :totalShouldLearn, learned = :learned " +
-                        "WHERE user_id = :userID AND date = :date",
+                        "WHERE user_id = :userID AND DATEDIFF(date, :date) = 0",
                 parameters
         );
     }

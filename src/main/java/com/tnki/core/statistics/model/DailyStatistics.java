@@ -1,5 +1,6 @@
 package com.tnki.core.statistics.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,9 +9,14 @@ import java.util.Date;
 
 @Data
 public class DailyStatistics {
+    @JsonIgnore
     private int userID;
+
     private int totalShouldLearn;
+
     private int learned;
+
+    @JsonIgnore
     private Date date;
 
     public static DailyStatistics create(Date date) {

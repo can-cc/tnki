@@ -5,10 +5,12 @@ import com.tnki.core.memox.repository.MemoItemRepository;
 import com.tnki.core.memox.repository.MemoLearnItemRepository;
 import com.tnki.core.memox.repository.MemoUserSettingRepository;
 import com.tnki.core.statistics.StatisticsApplicationService;
+import com.tnki.core.statistics.model.DailyStatistics;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class SuperMemoX {
@@ -62,9 +64,10 @@ public class SuperMemoX {
 
     @Transactional
     public void fillItemToLearn(int userID) {
-        int learningCount = memoLearnItemRepository.shouldLearnSize(userID, MemoDateUtil.today());
+        Optional<DailyStatistics> dailyStatisticsOptional = this.statisticsApplicationService.getDailyStatistics(userID, MemoDateUtil.today());
+        int addedItem = dailyStatisticsOptional.orElseGet(() -> new DailyStatistics()).getTotalShouldLearn();
         UserLearnSetting userLearnSetting = memoUserSettingRepository.findUserLearnSetting(userID);
-        int learnNewNumber = userLearnSetting.getDailyLearnNumber() - learningCount;
+        int learnNewNumber = userLearnSetting.getDailyLearnNumber() - addedItem;
 
         if (learnNewNumber <= 0) {
             return;
