@@ -30,7 +30,7 @@ public class DailyStatisticsRepositoryImpl extends BaseRepository implements Dai
         parameter.addValue("userID", userID);
         parameter.addValue("date", date);
         try {
-            return Optional.of(jdbcTemplate.queryForObject(
+            return Optional.ofNullable(jdbcTemplate.queryForObject(
                     "SELECT total_should_learn, learned FROM daily_learn_statistics WHERE user_id = :userID AND DATEDIFF(date, :date) = 0",
                     parameter,
                     new DailyStatisticsMapper(userID, date)
