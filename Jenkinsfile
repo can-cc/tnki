@@ -49,7 +49,7 @@ pipeline {
                 }
                 stage('remove image') {
                     steps {
-                        sh "docker image rm $DOCKER_REGISTER/jellyfish:v0.0.$BUILD_NUMBER"
+                        sh "docker image rm $DOCKER_REGISTER/tnki:v0.0.$BUILD_NUMBER"
                     }
                 }
             }
