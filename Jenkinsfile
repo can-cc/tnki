@@ -32,7 +32,7 @@ pipeline {
             stages {
                 stage("build docker container") {
                     steps {
-                        sh 'docker build . -t $DOCKER_REGISTER/tnki:v0.0.$BUILD_NUMBER'
+                        sh 'docker build . -t $DOCKER_REGISTER/tnki:v0.0.$BUILD_NUMBER -t $DOCKER_REGISTER/tnki:latest'
                     }
                 }
                 stage('registry Login') {
@@ -43,13 +43,16 @@ pipeline {
                 stage('publish image') {
                     steps {
                         sh 'docker push $DOCKER_REGISTER/tnki:v0.0.$BUILD_NUMBER'
+                        sh 'docker push $DOCKER_REGISTER/tnki:latest'
                         sh 'echo "$DOCKER_REGISTER/tnki:v0.0.$BUILD_NUMBER" > .artifacts'
+                        sh 'echo "$DOCKER_REGISTER/tnki:latest" >> .artifacts'
                         archiveArtifacts(artifacts: '.artifacts')
                     }
                 }
                 stage('remove image') {
                     steps {
                         sh "docker image rm $DOCKER_REGISTER/tnki:v0.0.$BUILD_NUMBER"
+                        sh "docker image rm $DOCKER_REGISTER/tnki:latest"
                     }
                 }
             }
