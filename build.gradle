@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.tnki'
-version = '0.0.1' // remeber to change Dockerfile jar name
+version = 'latest' // remeber to change Dockerfile jar name
 
 configurations {
 	developmentOnly
