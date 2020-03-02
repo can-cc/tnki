@@ -81,7 +81,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 HttpServletResponse response,
                 AuthenticationException authException) throws IOException {
 
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
                     "Unauthorized");
         }
     }
