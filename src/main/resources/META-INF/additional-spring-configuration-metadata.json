@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "logging.logstash.url",
+      "type": "java.lang.String",
+      "description": "logstash url"
+    },
+    {
+      "name": "application.signup.disable",
+      "type": "java.lang.Boolean",
+      "description": "Description for application.signup.disable."
+    }
+  ]
+}
