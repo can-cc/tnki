@@ -1,4 +1,7 @@
-FROM fwchen/tnki:latest
-RUN wget -O elastic-apm-agent-1.13.0.jar https://search.maven.org/remotecontent?filepath=co/elastic/apm/elastic-apm-agent/1.13.0/elastic-apm-agent-1.13.0.jar
+FROM gradle:jdk8
+WORKDIR /app
+COPY . /app
 COPY docker-scripts/entrypoint.sh .
+RUN ./gradlew build -x test
+RUN wget -O elastic-apm-agent-1.13.0.jar https://search.maven.org/remotecontent?filepath=co/elastic/apm/elastic-apm-agent/1.13.0/elastic-apm-agent-1.13.0.jar
 ENTRYPOINT ["./entrypoint.sh"]
