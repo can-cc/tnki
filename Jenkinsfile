@@ -4,9 +4,6 @@ pipeline {
         pollSCM('*/1 * * * *')
     }
      environment {
-        TNKI_MYSQL_HOST     = credentials('jenkins-tnki-mysql-host')
-        TNKI_MYSQL_USERNAME = credentials('jenkins-tnki-mysql-username')
-        TNKI_MYSQL_PASSWORD = credentials('jenkins-tnki-mysql-password')
         DOCKER_REGISTER = 'fwchen'
         docker_hub_username = credentials('docker_hub_username')
         docker_hub_password = credentials('docker_hub_password')
