@@ -4,6 +4,7 @@ pipeline {
         pollSCM('*/1 * * * *')
     }
      environment {
+        HOME = '.'
         DOCKER_REGISTER = 'fwchen'
         docker_hub_username = credentials('docker_hub_username')
         docker_hub_password = credentials('docker_hub_password')
