@@ -75,10 +75,10 @@ public class MemoxController {
     @RequestMapping(value = "/learning-items", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<MemoLearningItem> getLearningItems() {
+    public List<MemoLearningItem> getLearningItems(@RequestParam int offset, @RequestParam int limit) {
         Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = ((UserDetails) userDetails).getUsername();
         int userID = authApplicationService.getIdByUsername(username);
-        return memoxApplicationService.getLearningItems(userID, 0, 10);
+        return memoxApplicationService.getLearningItems(userID, offset, limit);
     }
 }
