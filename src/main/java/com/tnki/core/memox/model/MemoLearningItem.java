@@ -16,7 +16,9 @@ public class MemoLearningItem {
     private Date nextLearnDate;
     private Date lastLearnDate;
     private MemoItem memoItem;
-    private boolean isLearning = true;
+    private boolean isLearning;
+
+    MemoLearningItem() {}
 
     MemoLearningItem(MemoItem item, int userID) {
         this.setMemoItem(item);

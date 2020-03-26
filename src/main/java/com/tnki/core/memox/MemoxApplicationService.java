@@ -67,4 +67,8 @@ public class MemoxApplicationService {
         return superMemoX.getLearningItem(userID);
     }
 
+    List<MemoLearningItem> getLearningItems(int userID, int offset, int limit) {
+        return memoLearnItemRepository.find(userID, offset, limit);
+    }
+
 }

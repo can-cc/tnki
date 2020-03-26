@@ -71,4 +71,14 @@ public class MemoxController {
         int userID = authApplicationService.getIdByUsername(username);
         return memoxApplicationService.getDailyLearnItem(userID);
     }
+
+    @RequestMapping(value = "/learning-items", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<MemoLearningItem> getLearningItems() {
+        Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = ((UserDetails) userDetails).getUsername();
+        int userID = authApplicationService.getIdByUsername(username);
+        return memoxApplicationService.getLearningItems(userID, 0, 10);
+    }
 }

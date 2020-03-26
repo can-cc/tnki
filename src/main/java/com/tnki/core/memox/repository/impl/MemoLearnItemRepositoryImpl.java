@@ -4,6 +4,8 @@ import com.tnki.core.memox.model.MemoItem;
 import com.tnki.core.memox.model.MemoItemFactory;
 import com.tnki.core.memox.model.MemoLearningItem;
 import com.tnki.core.memox.repository.MemoLearnItemRepository;
+import com.tnki.core.memox.repository.mapper.MyBatisMemoLearningItemMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -12,34 +14,42 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class MemoLearnItemRepositoryImpl implements MemoLearnItemRepository {
 
     final private NamedParameterJdbcTemplate jdbcTemplate;
+    final private MyBatisMemoLearningItemMapper myBatisMemoLearningItemMapper;
 
-    public MemoLearnItemRepositoryImpl(NamedParameterJdbcTemplate jdbcTemplate) {
+    @Autowired
+    public MemoLearnItemRepositoryImpl(
+            NamedParameterJdbcTemplate jdbcTemplate,
+            MyBatisMemoLearningItemMapper myBatisMemoLearningItemMapper
+    ) {
         this.jdbcTemplate = jdbcTemplate;
+        this.myBatisMemoLearningItemMapper = myBatisMemoLearningItemMapper;
     }
 
     @Override
-    public int shouldLearnSize(int userID, Date nextLearnDate) {
+    public Optional<Integer> shouldLearnSize(int userID, Date nextLearnDate) {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("userID", userID);
         paramMap.put("nextLearnDate", nextLearnDate);
-        return jdbcTemplate.<Integer>queryForObject("SELECT count(item_id) as count from user_learn_item WHERE user_id = :userID AND next_learn_date = :nextLearnDate", paramMap, Integer.class);
+        return Optional.ofNullable(jdbcTemplate.<Integer>queryForObject("" +
+                        "SELECT count(item_id) as count " +
+                        "FROM user_learn_item " +
+                        "WHERE user_id = :userID " +
+                        "AND next_learn_date = :nextLearnDate",
+                paramMap, Integer.class));
     }
 
     @Override
-    public int learnedSize(int userID, Date lastLearnDate) {
+    public Optional<Integer> learnedSize(int userID, Date lastLearnDate) {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("userID", userID);
         paramMap.put("lastLearnDate", lastLearnDate);
-        return jdbcTemplate.<Integer>queryForObject("SELECT count(item_id) as count from user_learn_item WHERE user_id = :userID AND last_learn_date = :lastLearnDate", paramMap, Integer.class);
+        return Optional.ofNullable(jdbcTemplate.<Integer>queryForObject("SELECT count(item_id) as count from user_learn_item WHERE user_id = :userID AND last_learn_date = :lastLearnDate", paramMap, Integer.class));
     }
 
     @Transactional
@@ -70,6 +80,11 @@ public class MemoLearnItemRepositoryImpl implements MemoLearnItemRepository {
                 parameter,
                 memoLearningItemMapper
         );
+    }
+
+    @Override
+    public List<MemoLearningItem> find(int userID, int offset, int limit) {
+        return myBatisMemoLearningItemMapper.find(userID, offset, limit);
     }
 
     @Override
