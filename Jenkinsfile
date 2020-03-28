@@ -6,6 +6,7 @@ pipeline {
      environment {
         HOME = '.'
         DOCKER_REGISTER = 'fwchen'
+        SPRING_DATASOURCE_URL = credentials('tnki-datasource')
         docker_hub_username = credentials('docker_hub_username')
         docker_hub_password = credentials('docker_hub_password')
     }

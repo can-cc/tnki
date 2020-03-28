@@ -53,6 +53,7 @@ public class SuperMemoX {
     @Transactional
     public void startLearnItem(MemoItem memoItem, int userID) {
         MemoLearningItem memoLearningItem = new MemoLearningItem(memoItem, userID);
+        memoLearningItem.setLearning(true);
         memoLearningItem.setLearnTime(0);
         memoLearningItem.setEF(LEARN_ITEM_INITIAL_EF);
         memoLearningItem.setNextLearnDate(periodicCalculator.getStartLearnDate());
@@ -65,7 +66,7 @@ public class SuperMemoX {
     @Transactional
     public void fillItemToLearn(int userID) {
         Optional<DailyStatistics> dailyStatisticsOptional = this.statisticsApplicationService.getDailyStatistics(userID, MemoDateUtil.today());
-        int addedItem = dailyStatisticsOptional.orElseGet(() -> new DailyStatistics()).getTotalShouldLearn();
+        int addedItem = dailyStatisticsOptional.orElseGet(DailyStatistics::new).getTotalShouldLearn();
         UserLearnSetting userLearnSetting = memoUserSettingRepository.findUserLearnSetting(userID);
         int learnNewNumber = userLearnSetting.getDailyLearnNumber() - addedItem;
 
