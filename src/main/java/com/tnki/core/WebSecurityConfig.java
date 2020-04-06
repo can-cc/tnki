@@ -22,7 +22,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
-
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -47,17 +46,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic().disable()
                 .formLogin().disable()
                 .csrf().disable()
-                .exceptionHandling()
-                .authenticationEntryPoint(restAuthenticationEntryPoint)
-                .and()
                 .authorizeRequests()
-                .antMatchers("/hello").permitAll()
-                .antMatchers(HttpMethod.POST, "/signin", "/signup").permitAll()
-                .and()
-                .authorizeRequests()
-                .anyRequest().authenticated()
-                .and()
-                .logout()
+                .antMatchers("*")
                 .permitAll();
     }
 
