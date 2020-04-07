@@ -18,6 +18,7 @@ pipeline {
                 }
             }
             steps {
+                sh './gradlew clean'
                 sh './gradlew test'
             }
         }
