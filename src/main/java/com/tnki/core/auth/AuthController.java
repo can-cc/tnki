@@ -26,9 +26,9 @@ public class AuthController {
         this.authApplicationService = authApplicationService;
     }
 
-    @RequestMapping(value = "/signin", method = RequestMethod.POST)
-    public void login(@RequestBody @Valid LoginCommand command) {
-        authApplicationService.login(command);
+    @RequestMapping(value = "/authentication", method = RequestMethod.POST)
+    public int login(@RequestBody @Valid LoginCommand command) {
+      return authApplicationService.login(command);
     }
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)

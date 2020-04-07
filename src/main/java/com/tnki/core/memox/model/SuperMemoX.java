@@ -67,7 +67,7 @@ public class SuperMemoX {
     public void fillItemToLearn(int userID) {
         Optional<DailyStatistics> dailyStatisticsOptional = this.statisticsApplicationService.getDailyStatistics(userID, MemoDateUtil.today());
         int addedItem = dailyStatisticsOptional.orElseGet(DailyStatistics::new).getTotalShouldLearn();
-        UserLearnSetting userLearnSetting = memoUserSettingRepository.findUserLearnSetting(userID);
+        UserLearnSetting userLearnSetting = memoUserSettingRepository.findOne(userID).get();
         int learnNewNumber = userLearnSetting.getDailyLearnNumber() - addedItem;
 
         if (learnNewNumber <= 0) {

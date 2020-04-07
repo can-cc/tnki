@@ -2,6 +2,9 @@ package com.tnki.core.memox.repository;
 
 import com.tnki.core.memox.model.UserLearnSetting;
 
+import java.util.Optional;
+
 public interface MemoUserSettingRepository {
-    UserLearnSetting findUserLearnSetting(int userID);
+    Optional<UserLearnSetting> findOne(int userID);
+    void save(UserLearnSetting userLearnSetting);
 }

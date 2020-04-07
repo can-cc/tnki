@@ -5,7 +5,6 @@ import com.tnki.core.auth.exception.UserAlreadyExistException;
 import com.tnki.core.auth.model.User;
 import com.tnki.core.auth.repository.UserRepository;
 import com.tnki.core.auth.service.SecurityService;
-import com.tnki.core.memox.repository.MemoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,20 +25,18 @@ public class SecurityServiceImpl implements SecurityService {
     private final UserDetailsService userDetailsService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final MemoRepository memoRepository;
 
     @Autowired
     public SecurityServiceImpl(
             @Qualifier("TnkiUserDetailsService") UserDetailsService userDetailsService,
             AuthenticationManager authenticationManager,
             UserRepository userRepository,
-            @Qualifier("PasswordEncoder") PasswordEncoder passwordEncoder,
-            MemoRepository memoRepository) {
+            @Qualifier("PasswordEncoder") PasswordEncoder passwordEncoder
+           ) {
         this.userDetailsService = userDetailsService;
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.memoRepository = memoRepository;
     }
 
     private boolean userExists(String username) {
@@ -57,12 +54,10 @@ public class SecurityServiceImpl implements SecurityService {
         user.setUsername(command.username);
         user.setPasswordHash(passwordEncoder.encode(command.password));
         userRepository.insertUser(user);
-
-        memoRepository.insertUserLearnSetting(user.getID());
     }
 
     @Override
-    public void autoLogin(String username, String password) {
+    public int autoLogin(String username, String password) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
         authenticationManager.authenticate(usernamePasswordAuthenticationToken);
@@ -71,5 +66,6 @@ public class SecurityServiceImpl implements SecurityService {
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             logger.debug(String.format("Auto login %s successfully!", username));
         }
+        return userRepository.findByUsername(username).getID();
     }
 }

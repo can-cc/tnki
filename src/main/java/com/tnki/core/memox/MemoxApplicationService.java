@@ -17,6 +17,7 @@ import java.util.List;
 public class MemoxApplicationService {
     final private MemoItemFactory memoItemFactory;
     final private MemoItemRepository memoItemRepository;
+    final private MemoUserSettingRepository memoUserSettingRepository;
     final private UserDailyCheckInRecordRepository userDailyCheckInRecordRepository;
     final private MemoLearnItemRepository memoLearnItemRepository;
     final private SuperMemoX superMemoX;
@@ -26,6 +27,7 @@ public class MemoxApplicationService {
     public MemoxApplicationService(
             MemoItemFactory memoItemFactory,
             MemoItemRepository memoItemRepository,
+            MemoUserSettingRepository memoUserSettingRepository,
             UserDailyCheckInRecordRepository userDailyCheckInRecordRepository,
             MemoLearnItemRepository memoLearnItemRepository,
             SuperMemoX superMemoX,
@@ -33,6 +35,7 @@ public class MemoxApplicationService {
     ) {
         this.memoItemFactory = memoItemFactory;
         this.memoItemRepository = memoItemRepository;
+        this.memoUserSettingRepository = memoUserSettingRepository;
         this.userDailyCheckInRecordRepository = userDailyCheckInRecordRepository;
         this.memoLearnItemRepository = memoLearnItemRepository;
         this.superMemoX = superMemoX;
@@ -47,8 +50,13 @@ public class MemoxApplicationService {
     }
 
     void checkIn(int userID) {
+        if (memoUserSettingRepository.findOne(userID).isEmpty()) {
+            memoUserSettingRepository.save(UserLearnSetting.initUserLearnSetting(userID));
+        }
+
         UserDailyCheckInRecord userDailyCheckInRecord = userDailyCheckInRecordRepository.find(userID, MemoDateUtil.today());
         superMemoX.fillItemToLearn(userID);
+
         if (userDailyCheckInRecord == null) {
             userDailyCheckInRecordRepository.add(userID, MemoDateUtil.today());
         } else {

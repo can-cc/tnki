@@ -20,8 +20,8 @@ public class AuthApplicationService {
         this.userRepository = userRepository;
     }
 
-    void login(LoginCommand command) {
-        securityService.autoLogin(command.username, command.password);
+    int login(LoginCommand command) {
+        return securityService.autoLogin(command.username, command.password);
     }
 
     void signUp(SignUpCommand command) {

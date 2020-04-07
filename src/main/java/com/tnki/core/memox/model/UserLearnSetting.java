@@ -8,4 +8,13 @@ import lombok.Setter;
 public class UserLearnSetting {
     private int userId;
     private int dailyLearnNumber;
+
+    final static int DefaultDailyLearnNumber = 10;
+
+    static public UserLearnSetting initUserLearnSetting(int userID) {
+        UserLearnSetting userLearnSetting = new UserLearnSetting();
+        userLearnSetting.setUserId(userID);
+        userLearnSetting.setDailyLearnNumber(DefaultDailyLearnNumber);
+        return userLearnSetting;
+    }
 }
