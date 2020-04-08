@@ -27,7 +27,7 @@ public class AuthController {
     }
 
     @RequestMapping(value = "/authentication", method = RequestMethod.POST)
-    public int login(@RequestBody @Valid LoginCommand command) {
+    public long login(@RequestBody @Valid LoginCommand command) {
       return authApplicationService.login(command);
     }
 

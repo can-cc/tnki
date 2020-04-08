@@ -42,7 +42,7 @@ public class MemoUserSettingRepositoryImpl implements MemoUserSettingRepository 
 
     @Override
     public void save(UserLearnSetting userLearnSetting) {
-        Map<String, Integer> paramMap = new HashMap<>();
+        Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("userId", userLearnSetting.getUserId());
         paramMap.put("daily_learn_number", userLearnSetting.getDailyLearnNumber());
         SqlParameterSource param = new MapSqlParameterSource(paramMap);

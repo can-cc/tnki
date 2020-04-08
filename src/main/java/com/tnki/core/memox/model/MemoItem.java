@@ -8,7 +8,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class MemoItem {
-    private int ID;
+    private long ID;
     private String front;
     private String Back;
     private String tip;

@@ -7,5 +7,5 @@ import org.springframework.stereotype.Service;
 public interface SecurityService {
     void registerNewUser(SignUpCommand command);
 
-    int autoLogin(String username, String password);
+    long autoLogin(String username, String password);
 }

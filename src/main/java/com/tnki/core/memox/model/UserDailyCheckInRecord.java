@@ -8,7 +8,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class UserDailyCheckInRecord {
-    private int userID;
+    private long userID;
     private Date date;
     private int time;
 

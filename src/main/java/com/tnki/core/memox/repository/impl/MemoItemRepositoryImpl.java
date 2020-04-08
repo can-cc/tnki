@@ -1,8 +1,6 @@
 package com.tnki.core.memox.repository.impl;
 
 import com.tnki.core.memox.model.MemoItem;
-import com.tnki.core.memox.model.MemoItemFactory;
-import com.tnki.core.memox.model.MemoLearningItem;
 import com.tnki.core.memox.repository.MemoItemRepository;
 import com.tnki.core.share.model.BaseRepository;
 import org.springframework.jdbc.core.RowMapper;
@@ -12,7 +10,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,13 +53,13 @@ public class MemoItemRepositoryImpl extends BaseRepository implements MemoItemRe
 
     @Transactional
     @Override
-    public void add(MemoItem memoItem, int userID) {
+    public void add(MemoItem memoItem, long userID) {
         SqlParameterSource memoItemParams = new BeanPropertySqlParameterSource(memoItem);
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update("INSERT INTO learn_item(front, tip, back) VALUES (:front, :tip, :back)", memoItemParams, keyHolder);
         memoItem.setID(Objects.requireNonNull(keyHolder.getKey()).intValue());
 
-        Map<String, Integer> memoRelationParams = new HashMap<>();
+        Map<String, Object> memoRelationParams = new HashMap<>();
         memoRelationParams.put("userID", userID);
         memoRelationParams.put("itemID", memoItem.getID());
         jdbcTemplate.update("INSERT INTO user_create_item_relation (user_id, item_id) VALUES (:userID, :itemID)", memoRelationParams);

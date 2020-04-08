@@ -34,8 +34,8 @@ public class MemoxController {
     public HashMap<String, Object> createLearnItem(@RequestBody @Valid CreateLearnItemCommand command) {
         Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = ((UserDetails) userDetails).getUsername();
-        int userID = authApplicationService.getIdByUsername(username);
-        int id = memoxApplicationService.createLearnItem(command, userID);
+        long userID = authApplicationService.getIdByUsername(username);
+        long id = memoxApplicationService.createLearnItem(command, userID);
         HashMap<String, Object> res = new LinkedHashMap<>();
         res.put("id", id);
         return res;
@@ -75,10 +75,7 @@ public class MemoxController {
     @RequestMapping(value = "/learning-items", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<MemoLearningItem> getLearningItems(@RequestParam int offset, @RequestParam int limit) {
-        Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = ((UserDetails) userDetails).getUsername();
-        int userID = authApplicationService.getIdByUsername(username);
+    public List<MemoLearningItem> getLearningItems(@RequestParam int offset, @RequestParam int limit, @RequestHeader("X-App-Auth-UserID") int userID) {
         return memoxApplicationService.getLearningItems(userID, offset, limit);
     }
 }

@@ -10,7 +10,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class MemoLearningItem {
-    private int userID;
+    private long userID;
     private int learnTime;
     private double EF;
     private Date nextLearnDate;

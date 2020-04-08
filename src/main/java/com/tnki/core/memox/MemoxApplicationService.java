@@ -42,7 +42,7 @@ public class MemoxApplicationService {
         this.statisticsApplicationService = statisticsApplicationService;
     }
 
-    int createLearnItem(CreateLearnItemCommand command, int userID) {
+    long createLearnItem(CreateLearnItemCommand command, long userID) {
         MemoItem item = memoItemFactory.createMemoItemFromCommand(command);
         memoItemRepository.add(item, userID);
         log.info("Created learn item [{}].", item.getID());

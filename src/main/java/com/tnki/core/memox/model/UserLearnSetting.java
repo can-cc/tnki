@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserLearnSetting {
-    private int userId;
+    private long userId;
     private int dailyLearnNumber;
 
     final static int DefaultDailyLearnNumber = 10;
