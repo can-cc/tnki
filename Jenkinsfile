@@ -14,7 +14,7 @@ pipeline {
         stage('test') {
             agent {
                 docker {
-                    image 'gradle:jdk8'
+                    image 'gradle:jdk11'
                 }
             }
             steps {
