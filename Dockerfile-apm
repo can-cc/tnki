@@ -1,4 +1,4 @@
-FROM gradle:jdk8
+FROM gradle:jdk11
 WORKDIR /app
 COPY . /app
 COPY docker-scripts/entrypoint.sh .
