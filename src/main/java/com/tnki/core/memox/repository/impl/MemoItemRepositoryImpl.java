@@ -37,7 +37,7 @@ public class MemoItemRepositoryImpl extends BaseRepository implements MemoItemRe
     }
 
     @Override
-    public List<MemoItem> findAllUnLearned(int userID, int limit) {
+    public List<MemoItem> findAllUnLearned(long userID, int limit) {
         MapSqlParameterSource parameter = new MapSqlParameterSource();
         parameter.addValue("userID", userID);
         parameter.addValue("limit", limit);

@@ -49,7 +49,7 @@ public class MemoxApplicationService {
         return item.getID();
     }
 
-    void checkIn(int userID) {
+    void checkIn(long userID) {
         if (memoUserSettingRepository.findOne(userID).isEmpty()) {
             memoUserSettingRepository.save(UserLearnSetting.initUserLearnSetting(userID));
         }
@@ -65,17 +65,17 @@ public class MemoxApplicationService {
         }
     }
 
-    void learnItem(LearnItemCommand learnItemCommand, int userID) {
+    void learnItem(LearnItemCommand learnItemCommand, long userID) {
         MemoLearningItem memoLearningItem = memoLearnItemRepository.findOne(learnItemCommand.getItemID(), userID);
         superMemoX.learnItem(memoLearningItem, learnItemCommand.getMemoQuality());
         this.statisticsApplicationService.increaseDailyLearned(userID, 1);
     }
 
-    List<MemoLearningItem> getDailyLearnItem(int userID) {
+    List<MemoLearningItem> getDailyLearnItem(long userID) {
         return superMemoX.getLearningItem(userID);
     }
 
-    List<MemoLearningItem> getLearningItems(int userID, int offset, int limit) {
+    List<MemoLearningItem> getLearningItems(long userID, int offset, int limit) {
         return memoLearnItemRepository.find(userID, offset, limit);
     }
 

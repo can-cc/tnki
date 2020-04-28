@@ -29,6 +29,6 @@ public interface MyBatisMemoLearningItemMapper {
             @Result(column = "item_created_at", property = "memoItem.createdAt"),
             @Result(column = "item_updated_at", property = "memoItem.updatedAt"),
     })
-    List<MemoLearningItem> find(@Param("userID") int userID, @Param("offset") int offset, @Param("limit") int limit);
+    List<MemoLearningItem> find(@Param("userID") long userID, @Param("offset") int offset, @Param("limit") int limit);
 
 }

@@ -27,7 +27,7 @@ public class UserDailyCheckInRecordRepositoryImpl implements UserDailyCheckInRec
 
     @Transactional
     @Override
-    public void add(int userID, Date date) {
+    public void add(long userID, Date date) {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("userID", userID);
         paramMap.put("date", date);
@@ -37,7 +37,7 @@ public class UserDailyCheckInRecordRepositoryImpl implements UserDailyCheckInRec
     @Override
     public
     @Nullable
-    UserDailyCheckInRecord find(int userID, Date date) {
+    UserDailyCheckInRecord find(long userID, Date date) {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("userID", userID);
         paramMap.put("date", date);

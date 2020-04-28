@@ -18,7 +18,7 @@ public class StatisticsApplicationService {
         this.dailyStatisticsRepository = dailyStatisticsRepository;
     }
 
-    public void increaseDailyTotalLearn(int userID, int number) {
+    public void increaseDailyTotalLearn(long userID, int number) {
         Optional<DailyStatistics> dailyStatisticsOptional = dailyStatisticsRepository.findOne(userID, MemoDateUtil.today());
         if (dailyStatisticsOptional.isPresent()) {
             DailyStatistics dailyStatistics = dailyStatisticsOptional.get();
@@ -32,14 +32,14 @@ public class StatisticsApplicationService {
         }
     }
 
-    public void increaseDailyLearned(int userID, int number) {
+    public void increaseDailyLearned(long userID, int number) {
         Optional<DailyStatistics> dailyStatisticsOptional = dailyStatisticsRepository.findOne(userID, MemoDateUtil.today());
         DailyStatistics dailyStatistics = dailyStatisticsOptional.orElseGet(() -> DailyStatistics.create(MemoDateUtil.today()));
         dailyStatistics.increaseLearned(number);
         this.dailyStatisticsRepository.update(dailyStatistics);
     }
 
-    public Optional<DailyStatistics> getDailyStatistics(int userID, Date date) {
+    public Optional<DailyStatistics> getDailyStatistics(long userID, Date date) {
         return dailyStatisticsRepository.findOne(userID, date);
     }
 

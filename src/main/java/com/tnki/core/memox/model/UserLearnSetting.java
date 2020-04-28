@@ -11,7 +11,7 @@ public class UserLearnSetting {
 
     final static int DefaultDailyLearnNumber = 10;
 
-    static public UserLearnSetting initUserLearnSetting(int userID) {
+    static public UserLearnSetting initUserLearnSetting(long userID) {
         UserLearnSetting userLearnSetting = new UserLearnSetting();
         userLearnSetting.setUserId(userID);
         userLearnSetting.setDailyLearnNumber(DefaultDailyLearnNumber);

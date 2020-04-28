@@ -25,7 +25,7 @@ public class DailyStatisticsRepositoryImpl extends BaseRepository implements Dai
     }
 
     @Override
-    public Optional<DailyStatistics> findOne(int userID, Date date) {
+    public Optional<DailyStatistics> findOne(long userID, Date date) {
         MapSqlParameterSource parameter = new MapSqlParameterSource();
         parameter.addValue("userID", userID);
         parameter.addValue("date", date);
@@ -58,10 +58,10 @@ public class DailyStatisticsRepositoryImpl extends BaseRepository implements Dai
 
     private static final class DailyStatisticsMapper implements RowMapper<DailyStatistics> {
 
-        private final int userID;
+        private final long userID;
         private final Date date;
 
-        private DailyStatisticsMapper(int userID, Date date) {
+        private DailyStatisticsMapper(long userID, Date date) {
             this.userID = userID;
             this.date = date;
         }

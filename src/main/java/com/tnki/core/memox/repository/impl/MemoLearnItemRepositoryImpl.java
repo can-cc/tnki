@@ -32,7 +32,7 @@ public class MemoLearnItemRepositoryImpl implements MemoLearnItemRepository {
     }
 
     @Override
-    public Optional<Integer> shouldLearnSize(int userID, Date nextLearnDate) {
+    public Optional<Integer> shouldLearnSize(long userID, Date nextLearnDate) {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("userID", userID);
         paramMap.put("nextLearnDate", nextLearnDate);
@@ -45,7 +45,7 @@ public class MemoLearnItemRepositoryImpl implements MemoLearnItemRepository {
     }
 
     @Override
-    public Optional<Integer> learnedSize(int userID, Date lastLearnDate) {
+    public Optional<Integer> learnedSize(long userID, Date lastLearnDate) {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("userID", userID);
         paramMap.put("lastLearnDate", lastLearnDate);
@@ -65,7 +65,7 @@ public class MemoLearnItemRepositoryImpl implements MemoLearnItemRepository {
     }
 
     @Override
-    public List<MemoLearningItem> findAll(int userID, Date nextLearnDate) {
+    public List<MemoLearningItem> findAll(long userID, Date nextLearnDate) {
         MapSqlParameterSource parameter = new MapSqlParameterSource();
         parameter.addValue("userID", userID);
         parameter.addValue("nextLearnDate", nextLearnDate);
@@ -83,12 +83,12 @@ public class MemoLearnItemRepositoryImpl implements MemoLearnItemRepository {
     }
 
     @Override
-    public List<MemoLearningItem> find(int userID, int offset, int limit) {
+    public List<MemoLearningItem> find(long userID, int offset, int limit) {
         return myBatisMemoLearningItemMapper.find(userID, offset, limit);
     }
 
     @Override
-    public MemoLearningItem findOne(int memoItemID, int userID) {
+    public MemoLearningItem findOne(int memoItemID, long userID) {
         MapSqlParameterSource parameter = new MapSqlParameterSource();
         parameter.addValue("userID", userID);
         parameter.addValue("memoItemID", memoItemID);
@@ -121,9 +121,9 @@ public class MemoLearnItemRepositoryImpl implements MemoLearnItemRepository {
     }
 
     private static final class MemoLearningItemMapper implements RowMapper<MemoLearningItem> {
-        private int userID;
+        private long userID;
 
-        private MemoLearningItemMapper(int userID) {
+        private MemoLearningItemMapper(long userID) {
             this.userID = userID;
         }
 

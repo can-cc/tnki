@@ -35,7 +35,7 @@ public class SuperMemoX {
         this.statisticsApplicationService= statisticsApplicationService;
     }
 
-    public List<MemoLearningItem> getLearningItem(int userID) {
+    public List<MemoLearningItem> getLearningItem(long userID) {
         return memoLearnItemRepository.findAll(userID, MemoDateUtil.today());
     }
 
@@ -51,7 +51,7 @@ public class SuperMemoX {
     }
 
     @Transactional
-    public void startLearnItem(MemoItem memoItem, int userID) {
+    public void startLearnItem(MemoItem memoItem, long userID) {
         MemoLearningItem memoLearningItem = new MemoLearningItem(memoItem, userID);
         memoLearningItem.setLearning(true);
         memoLearningItem.setLearnTime(0);
@@ -64,7 +64,7 @@ public class SuperMemoX {
     }
 
     @Transactional
-    public void fillItemToLearn(int userID) {
+    public void fillItemToLearn(long userID) {
         Optional<DailyStatistics> dailyStatisticsOptional = this.statisticsApplicationService.getDailyStatistics(userID, MemoDateUtil.today());
         int addedItem = dailyStatisticsOptional.orElseGet(DailyStatistics::new).getTotalShouldLearn();
         UserLearnSetting userLearnSetting = memoUserSettingRepository.findOne(userID).get();

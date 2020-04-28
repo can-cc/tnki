@@ -10,7 +10,7 @@ import java.util.Date;
 @Data
 public class DailyStatistics {
     @JsonIgnore
-    private int userID;
+    private long userID;
 
     private int totalShouldLearn;
 

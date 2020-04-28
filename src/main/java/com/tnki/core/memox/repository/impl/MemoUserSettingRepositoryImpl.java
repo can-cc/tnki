@@ -28,7 +28,7 @@ public class MemoUserSettingRepositoryImpl implements MemoUserSettingRepository 
     }
 
     @Override
-    public Optional<UserLearnSetting> findOne(int userID) {
+    public Optional<UserLearnSetting> findOne(long userID) {
         try {
             return Optional.of(jdbcTemplate.queryForObject(
                     "SELECT user_id, daily_learn_number FROM user_learn_setting WHERE user_id = :userID",

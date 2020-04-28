@@ -7,15 +7,15 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MemoLearnItemRepository {
-    Optional<Integer> shouldLearnSize(int userID, Date nextLearnDate);
+    Optional<Integer> shouldLearnSize(long userID, Date nextLearnDate);
 
-    Optional<Integer> learnedSize(int userID, Date lastLearnDate);
+    Optional<Integer> learnedSize(long userID, Date lastLearnDate);
 
-    List<MemoLearningItem> findAll(int userID, Date nextLearnDate);
+    List<MemoLearningItem> findAll(long userID, Date nextLearnDate);
 
-    List<MemoLearningItem> find(int userID, int offset, int limit);
+    List<MemoLearningItem> find(long userID, int offset, int limit);
 
-    MemoLearningItem findOne(int memoItemID, int userID);
+    MemoLearningItem findOne(int memoItemID, long userID);
 
     void add(MemoLearningItem memoLearningItem);
 

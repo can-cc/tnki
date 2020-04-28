@@ -20,7 +20,7 @@ public class MemoLearningItem {
 
     MemoLearningItem() {}
 
-    MemoLearningItem(MemoItem item, int userID) {
+    MemoLearningItem(MemoItem item, long userID) {
         this.setMemoItem(item);
         this.setUserID(userID);
     }

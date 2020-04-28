@@ -28,10 +28,7 @@ public class StatisticsController {
     @RequestMapping(value = "/daily-learn-statistics", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public DailyStatistics getDailyStatistics() {
-        Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = ((UserDetails) userDetails).getUsername();
-        int userID = authApplicationService.getIdByUsername(username);
+    public DailyStatistics getDailyStatistics(@RequestHeader("X-App-Auth-UserID") long userID) {
         Optional<DailyStatistics> optional = statisticsApplicationService.getDailyStatistics(userID, MemoDateUtil.today());
         if (!optional.isPresent()) {
             throw new DailyStatisticsNotFoundException();

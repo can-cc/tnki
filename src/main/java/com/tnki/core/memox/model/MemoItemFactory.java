@@ -14,7 +14,7 @@ public class MemoItemFactory {
         return item;
     }
 
-    public MemoLearningItem createMemoLearningItem(MemoItem memoItem, int userID) {
+    public MemoLearningItem createMemoLearningItem(MemoItem memoItem, long userID) {
         return new MemoLearningItem(memoItem, userID);
     }
 

@@ -31,10 +31,7 @@ public class MemoxController {
     @RequestMapping(value = "/learn-item", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public HashMap<String, Object> createLearnItem(@RequestBody @Valid CreateLearnItemCommand command) {
-        Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = ((UserDetails) userDetails).getUsername();
-        long userID = authApplicationService.getIdByUsername(username);
+    public HashMap<String, Object> createLearnItem(@RequestBody @Valid CreateLearnItemCommand command, @RequestHeader("X-App-Auth-UserID") long userID) {
         long id = memoxApplicationService.createLearnItem(command, userID);
         HashMap<String, Object> res = new LinkedHashMap<>();
         res.put("id", id);
@@ -45,37 +42,28 @@ public class MemoxController {
     @RequestMapping(value = "/daily-check-in", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public void dailyCheckIn() {
-        Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = ((UserDetails) userDetails).getUsername();
-        int userID = authApplicationService.getIdByUsername(username);
+    public void dailyCheckIn(@RequestHeader("X-App-Auth-UserID") long userID) {
         memoxApplicationService.checkIn(userID);
     }
 
     @RequestMapping(value = "/learn", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public void learnItem(@RequestBody @Valid LearnItemCommand command) {
-        Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = ((UserDetails) userDetails).getUsername();
-        int userID = authApplicationService.getIdByUsername(username);
+    public void learnItem(@RequestBody @Valid LearnItemCommand command, @RequestHeader("X-App-Auth-UserID") long userID) {
         memoxApplicationService.learnItem(command, userID);
     }
 
     @RequestMapping(value = "/daily-learn-item", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<MemoLearningItem> getDailyLearnItem() {
-        Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = ((UserDetails) userDetails).getUsername();
-        int userID = authApplicationService.getIdByUsername(username);
+    public List<MemoLearningItem> getDailyLearnItem(@RequestHeader("X-App-Auth-UserID") long userID) {
         return memoxApplicationService.getDailyLearnItem(userID);
     }
 
     @RequestMapping(value = "/learning-items", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<MemoLearningItem> getLearningItems(@RequestParam int offset, @RequestParam int limit, @RequestHeader("X-App-Auth-UserID") int userID) {
+    public List<MemoLearningItem> getLearningItems(@RequestParam int offset, @RequestParam int limit, @RequestHeader("X-App-Auth-UserID") long userID) {
         return memoxApplicationService.getLearningItems(userID, offset, limit);
     }
 }
