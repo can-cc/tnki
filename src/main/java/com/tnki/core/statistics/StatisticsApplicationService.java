@@ -42,5 +42,4 @@ public class StatisticsApplicationService {
     public Optional<DailyStatistics> getDailyStatistics(long userID, Date date) {
         return dailyStatisticsRepository.findOne(userID, date);
     }
-
 }
